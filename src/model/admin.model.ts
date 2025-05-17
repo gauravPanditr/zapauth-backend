@@ -1,7 +1,8 @@
-import { access } from "fs";
+
 import { Schema } from "mongoose";
 import bcrypt from "bcrypt";
-import { logger } from "../utilis/logger";
+import { IAdmin, IAdminModel, IAdminMethods } from "../types/model-types.ts/admin.types";
+import { model } from "mongoose";
 const AdminSchema=new Schema<IAdmin, IAdminModel, IAdminMethods>({
       name:{
             type:String,
