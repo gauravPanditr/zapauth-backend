@@ -1,4 +1,3 @@
-
 import { Schema } from "mongoose";
 import bcrypt from "bcrypt";
 import { IAdmin, IAdminModel, IAdminMethods } from "../types/model-types.ts/admin.types";
