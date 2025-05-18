@@ -1,11 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { AdminModel } from "../model/admin.model";
 
-import { Types } from "mongoose";
 
-import { Document } from "mongoose";
-import { Model } from "mongoose";
-import { logger } from "../utilis/logger";
 
 export const adminAuth = async (
   req: Request,
