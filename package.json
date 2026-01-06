@@ -22,16 +22,20 @@
   },
   "homepage": "https://github.com/gauravPanditr/zapauth-backend#readme",
   "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
     "@types/express": "^5.0.6",
     "@types/mongoose": "^5.11.96",
     "nodemon": "^3.1.11",
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@types/bcrypt": "^6.0.0",
     "@types/cookie-parser": "^1.4.10",
+    "@types/jsonwebtoken": "^9.0.10",
+    "bcrypt-ts": "^8.0.0",
     "concurrently": "^9.2.1",
     "dotenv": "^17.2.3",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "ts-dotenv": "^0.9.1"
   }
 }
