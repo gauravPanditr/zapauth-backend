@@ -3,6 +3,7 @@ import { connectMongo } from "./db/mongo";
 import { CONFIG } from "./config";
 import dotenv from "dotenv";
 import adminRoutes from "./routes/admin.routes";
+import projectRoutes from"./routes/project.routes"
 const app = express();
 
 
@@ -11,7 +12,7 @@ async function startServer() {
 dotenv.config();
 app.use(express.json());
 app.use("/api/admin",adminRoutes);
-
+app.use("/api/projects", projectRoutes);
 
   app.listen(CONFIG.port, () => {
     console.log(`Server running at http://localhost:${CONFIG.port}`);
