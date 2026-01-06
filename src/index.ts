@@ -1,8 +1,16 @@
-import express,{Express} from 'express';
+import express from "express";
+import { connectMongo } from "./db/mongo";
+import { CONFIG } from "./config";
 
-const app:Express = express();
-const port = process.env.PORT || 3000;
+const app = express();
+app.use(express.json());
 
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
-});
+async function startServer() {
+  await connectMongo(CONFIG.mongoUri);
+
+  app.listen(CONFIG.port, () => {
+    console.log(`Server running at http://localhost:${CONFIG.port}`);
+  });
+}
+
+startServer();
