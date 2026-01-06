@@ -1,16 +1,8 @@
-import express, { Request, Response } from 'express';
+import express,{Express} from 'express';
 
-const app = express();
-const PORT = process.env.PORT || 3000;
-import connectDB from './config/db';
-import dotenv from 'dotenv';
+const app:Express = express();
+const port = process.env.PORT || 3000;
 
-dotenv.config();
-
-
-
-connectDB().then(() => {
-  app.listen(PORT, () => {
-    console.log(`Server is running at http://localhost:${PORT}`);
-  });
+app.listen(port, () => {
+  console.log(`Server running at http://localhost:${port}`);
 });
