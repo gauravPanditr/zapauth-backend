@@ -6,7 +6,7 @@ export interface IProject {
   appName: string;
   appEmail: string;
   projectKey: string;
-  owner: Types.ObjectId; // reference to Admin
+  owner: Types.ObjectId; 
 }
 
 // Basic Project Schema
