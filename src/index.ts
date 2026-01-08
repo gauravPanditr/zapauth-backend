@@ -1,5 +1,5 @@
 import express from "express";
-import { connectMongo } from "./db/mongo";
+
 import { CONFIG } from "./config";
 import dotenv from "dotenv";
 import adminRoutes from "./routes/admin.routes";
@@ -11,7 +11,7 @@ app.use(cors());
 
 
 async function startServer() {
-  await connectMongo(CONFIG.mongoUri);
+
 dotenv.config();
 app.use(express.json());
 app.use("/api/admin",adminRoutes);

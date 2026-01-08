@@ -7,7 +7,7 @@ datasource db {
   provider = "mongodb"
 }
 
-model admins {
+model Admins {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   v         Int      @map("__v")
   createdAt DateTime @db.Date
@@ -17,7 +17,7 @@ model admins {
   updatedAt DateTime @db.Date
 }
 
-model projects {
+model Projects {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   v           Int      @map("__v")
   appEmail    String
@@ -29,7 +29,7 @@ model projects {
   updatedAt   DateTime @db.Date
 }
 
-model users {
+model Users {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   v         Int      @map("__v")
   createdAt DateTime @db.Date
