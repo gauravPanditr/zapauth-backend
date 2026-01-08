@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mongodb"
+}
+
+model admins {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  v         Int      @map("__v")
+  createdAt DateTime @db.Date
+  email     String   @unique(map: "email_1")
+  name      String
+  password  String
+  updatedAt DateTime @db.Date
+}
+
+model projects {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  v           Int      @map("__v")
+  appEmail    String
+  appName     String
+  createdAt   DateTime @db.Date
+  owner       String   @db.ObjectId
+  projectKey  String   @unique(map: "projectKey_1")
+  projectName String
+  updatedAt   DateTime @db.Date
+}
+
+model users {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  v         Int      @map("__v")
+  createdAt DateTime @db.Date
+  email     String   @unique(map: "email_1")
+  password  String
+  project   String   @db.ObjectId
+  updatedAt DateTime @db.Date
+  username  String
+}
