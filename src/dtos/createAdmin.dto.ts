@@ -4,9 +4,8 @@ import { IsEmail, IsNotEmpty, IsString, Length } from "class-validator";
 export default class CreateAdminDto {
     
 
-     @IsNotEmpty()
+    @IsNotEmpty()
     @IsString()
-    
     username: string;
 
     @IsEmail()
@@ -23,8 +22,9 @@ export default class CreateAdminDto {
 
 
     constructor(email: string, password: string,username: string) {
+        this.username = username;
         this.email = email;
         this.password = password;
-        this.username = username;
+        
     }
 }
