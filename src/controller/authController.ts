@@ -1,8 +1,39 @@
-// import { Request, Response } from "express";
-// import mongoose from "mongoose";
-// import { User } from "../model/user.model";
-// import { Project } from "../model/project.model";
+// // import { Request, Response } from "express";
+// // import mongoose from "mongoose";
+// // import { User } from "../model/user.model";
+// // import { Project } from "../model/project.model";
 
+// import { plainToInstance } from "class-transformer";
+// import AdminService from "../service/admin.service";
+// import CreateAdminDto from "../dtos/createAdmin.dto";
+// import InternalServerError from "../errors/internalServer.error";
+
+
+
+
+// class AdminController{
+//     private adminService=new AdminService();
+//     async signup(req:Request ,res:Response){
+//         try{
+//             const createAdminDto=plainToInstance(CreateAdminDto,req.body);
+
+
+//             const admin=await this.adminService.createAdmin(createAdminDto);
+//             return res;
+//             console.log(admin);
+            
+            
+//         }
+//     catch(err:any){
+//         console.error(err);
+//         return new InternalServerError(err);
+//     }
+
+// }
+  
+// }
+
+// export default AdminController;
 
 // export const signup = async (req: Request, res: Response) => {
 //   try {
