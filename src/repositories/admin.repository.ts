@@ -1,9 +1,8 @@
 import CreateAdminDto from "../dtos/createAdmin.dto";
-import bcrypt from 'bcrypt-ts';
 
 import { prisma } from "../config/dbConfig";
 import { Admins } from "../../generated/prisma/client";
-import LoginAdminDto from "../dtos/loginAdmin.dto";
+
 class AdminRespository {
 
   async createAdmin(adminDetails: CreateAdminDto): Promise<Admins> {
@@ -18,14 +17,13 @@ class AdminRespository {
     })
     return newAdmin;
   }
-  async loginAdmin(dto: LoginAdminDto): Promise<Admins | null> {
-    const admin = await prisma.admins.findUnique({ where: { email: dto.email } });
-    if (!admin) return null;
-
-    const validPassword = await bcrypt.compare(dto.password, admin.password);
-    if (!validPassword) return null;
-
-    return admin;
+  async getAdminByUsername(username: string): Promise<Admins | null> {
+    const user = await prisma.admins.findFirst({ where: { username: username } });
+    return user;
+  }
+  async getAdminByEmail(adminEmail:string):Promise<Admins | null>{
+     const email=await prisma.admins.findFirst({where :{email:adminEmail}});
+     return email;
   }
 
   async getAdminById(id: string): Promise<Admins | null> {

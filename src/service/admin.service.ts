@@ -18,7 +18,8 @@ class AdminService{
     }
 
     async loginAdmin(dto:LoginAdminDto){
-        const admin =await this.adminRepository.loginAdmin(dto);
+        const admin =await this.adminRepository.getAdminByEmail(dto.email);
+        
         return admin;
     }
 
