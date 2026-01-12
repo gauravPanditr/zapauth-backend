@@ -28,7 +28,7 @@ class AdminRespository {
 
   async getAdminById(id: string): Promise<Admins | null> {
     const admin = await prisma.admins.findUnique({ where: { id } });
-    if (!admin) return null;
+    // if (!admin) return null;
     return admin;
   }
 

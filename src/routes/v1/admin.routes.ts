@@ -7,7 +7,10 @@ const adminrouter = Router();
 // Signup
 adminrouter.post("/signup",adminController.createAdmin);
 
+//login
+adminrouter.post("/login",adminController.loginAdmin);
 
+adminrouter.get("/:id",adminController.getById);
 
 
 export default adminrouter;

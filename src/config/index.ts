@@ -4,5 +4,6 @@ dotenv.config();
 
 export default {
     PORT: process.env.PORT,
+      JWT_SECRET: (process.env.JWT_SECRET == undefined) ? 'DUMMY' : process.env.JWT_SECRET,
 } 
   
