@@ -1,12 +1,11 @@
-// import { Router } from "express";
-// import { createProject, getProjectsByAdmin } from "../controller/projectController";
+import { Router } from "express";
+import projectController from "../../controller/projectController";
 
-// const router = Router();
+const projectRouter = Router();
 
-// // Create project
-// router.post("/create", createProject);
+// Create project
+projectRouter.post("/create", projectController.createProject);
 
-// // Get all projects for an admin
-// router.get("/admin/:adminId", getProjectsByAdmin);
 
-// export default router;
+
+export default projectRouter;
