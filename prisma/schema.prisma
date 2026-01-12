@@ -8,16 +8,25 @@ datasource db {
 }
 
 model Admins {
-  id        String   @id @default(uuid())
-  v         Int      @map("__v") @default(0)
-  createdAt DateTime @default(now())
+  id        String    @id @default(uuid())
+  v         Int       @default(0) @map("__v")
+  createdAt DateTime  @default(now())
+  email     String    @unique
   username  String
-  email     String   @unique
   password  String
-  projects  Project[]   @relation("AdminsToProjects")
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime  @updatedAt
+  projects  Project[]      @relation("AdminsToProjects")
+  refreshTokens RefreshToken[]
 }
 
+model RefreshToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  adminId   String
+  admin     Admins   @relation(fields: [adminId], references: [id])
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+}
 
 model Project {
   id          String   @id @default(uuid())
@@ -25,10 +34,8 @@ model Project {
   appName     String
   appEmail    String
   projectKey  String   @unique
-
   ownerId     String
-  owner       Admins   @relation("AdminsToProjects", fields: [ownerId], references: [id])
-
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  owner       Admins   @relation("AdminsToProjects", fields: [ownerId], references: [id])
 }

@@ -1,7 +1,7 @@
 import CreateAdminDto from "../dtos/createAdmin.dto";
 
 import { prisma } from "../config/dbConfig";
-import { Admins } from "../../generated/prisma/client";
+import { Admins,RefreshToken } from "../../generated/prisma/client";
 
 class AdminRespository {
 
@@ -28,11 +28,27 @@ class AdminRespository {
 
   async getAdminById(id: string): Promise<Admins | null> {
     const admin = await prisma.admins.findUnique({ where: { id } });
-    // if (!admin) return null;
+   
     return admin;
   }
 
+ async saveRefreshToken(
+    token: string,
+    adminId: string,
+    expiresAt: Date
+  ): Promise<RefreshToken> {
+    return prisma.refreshToken.create({
+      data: { token, adminId, expiresAt },
+    });
+  }
 
+  async findRefreshToken(token: string): Promise<RefreshToken | null> {
+    return prisma.refreshToken.findUnique({ where: { token } });
+  }
+
+  async deleteRefreshToken(token: string): Promise<RefreshToken> {
+    return prisma.refreshToken.delete({ where: { token } });
+  }
 }
 
 export default AdminRespository;

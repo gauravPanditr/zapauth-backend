@@ -1,6 +1,6 @@
 import { prisma } from "../config/dbConfig";
 import { CreateProjectDTO } from "../dtos/createProjectdto";
-
+import { UpdateProjectDTO } from "../dtos/updateProject.dto";
 
 class ProjectRespository{
   async createProject(dto : CreateProjectDTO){
@@ -17,7 +17,26 @@ class ProjectRespository{
      })
      return project;
   }
- async
+   async updateProject(dto: UpdateProjectDTO) {
+    const data: any = {};
+
+    if (dto.projectName !== undefined) {
+      data.projectName = dto.projectName;
+    }
+
+    if (dto.appName !== undefined) {
+      data.appName = dto.appName;
+    }
+
+    if (dto.appEmail !== undefined) {
+      data.appEmail = dto.appEmail;
+    }
+
+    return prisma.project.update({
+      where: { id: dto.id },
+      data,
+    });
+  }
 }
 
 

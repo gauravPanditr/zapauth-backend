@@ -1,5 +1,6 @@
 import { Project } from "../../generated/prisma/client";
 import { CreateProjectDTO } from "../dtos/createProjectdto";
+import { UpdateProjectDTO } from "../dtos/updateProject.dto";
 import ProjectRespository from "../repositories/project.repository";
 
 class ProjectService{
@@ -23,6 +24,10 @@ class ProjectService{
 
     return project;
    } 
+   async updateProject(dto:UpdateProjectDTO){
+       const updateproject=await this.projectrepository.updateProject(dto);
+       return updateproject;
+   }
 }
 
 export default ProjectService;
