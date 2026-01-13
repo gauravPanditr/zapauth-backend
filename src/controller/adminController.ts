@@ -62,7 +62,9 @@ const getById = async (req: Request, res: Response) => {
     }
 }
  const refreshToken = async (req: Request, res: Response) => {
-  const { refreshToken } = req.body; // or from cookie
+  const { refreshToken } = req.body;
+
+ // or from cookie
   try {
     const tokens = await adminService.refreshTokens(refreshToken);
     res.json(tokens);

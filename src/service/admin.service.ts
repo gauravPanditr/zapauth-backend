@@ -9,6 +9,8 @@ import { generateAccessToken, generateRefreshToken } from "../utils/auth.utils";
 import type { Admins } from "@prisma/client";
 import { JwtPayload } from "../types/jwtPayload";
 import { verify } from "jsonwebtoken";
+import serverConfig from "../config"
+
 class AdminService {
 
     private adminRepository: AdminRespository
@@ -77,20 +79,29 @@ class AdminService {
     }
 
       async refreshTokens(refreshToken: string) {
+      
     if (!refreshToken) throw new UnauthorisedError("Refresh token missing");
 
     // 1. Find admin with this refresh token
+     
     const admin = await this.adminRepository.getAdminByRefreshToken(refreshToken);
+   
     if (!admin) throw new UnauthorisedError("Invalid refresh token");
 
     try {
-      // 2. Verify the refresh token
-      const payload = verify(refreshToken, process.env.REFRESH_TOKEN_SECRET!) as JwtPayload;
+     
+      const payload = verify(refreshToken,serverConfig.REFRESH_TOKEN_SECRET) as JwtPayload;
+       
+       const { id, email, username } = payload;
 
+const cleanPayload = { id, email, username }; 
       // 3. Generate new tokens
-      const newAccessToken = generateAccessToken(payload);
-      const newRefreshToken = generateRefreshToken(payload);
-
+      const newAccessToken = generateAccessToken(cleanPayload);
+      console.log(newAccessToken);
+      
+      const newRefreshToken = generateRefreshToken(cleanPayload);
+      console.log(newRefreshToken);
+      
       // 4. Save new refresh token in DB
       await this.adminRepository.saveRefreshToken(
         newRefreshToken,
