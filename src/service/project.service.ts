@@ -1,4 +1,4 @@
-import { Project } from "../../generated/prisma/client";
+import { Project } from "@prisma/client";
 import { CreateProjectDTO } from "../dtos/createProjectdto";
 import { UpdateProjectDTO } from "../dtos/updateProject.dto";
 import ProjectRespository from "../repositories/project.repository";
