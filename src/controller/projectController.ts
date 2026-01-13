@@ -12,9 +12,17 @@ const projectService = new ProjectService(new ProjectRespository());
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
-
+const updateProject=async(req:Request,res:Response)=>{
+   try {
+    const response=await projectService.updateProject(req.body);
+    
+   } catch (error) {
+    
+   }
+}
 
 export default{
-    createProject
+    createProject,
+    updateProject
 }
 
