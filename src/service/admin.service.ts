@@ -6,7 +6,7 @@ import UnauthorisedError from "../errors/unauthorisedError";
 import AdminRespository from "../repositories/admin.repository"
 import bcrypt from "bcrypt-ts"
 import { generateAccessToken, generateRefreshToken } from "../utils/auth.utils";
-import { Admins } from "@prisma/client";
+import type { Admins } from "@prisma/client";
 import { JwtPayload } from "../types/jwtPayload";
 class AdminService {
 

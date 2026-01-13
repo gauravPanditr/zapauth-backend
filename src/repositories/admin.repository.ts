@@ -1,7 +1,7 @@
 import CreateAdminDto from "../dtos/createAdmin.dto";
 
 import { prisma } from "../config/dbConfig";
-import { Admins,RefreshToken } from "@prisma/client";
+import type { Admins,RefreshToken } from "@prisma/client";
 
 class AdminRespository {
 
