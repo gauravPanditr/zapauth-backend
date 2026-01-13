@@ -4,7 +4,7 @@ import LoginAdminDto from "../dtos/loginAdmin.dto";
 import NotFoundError from "../errors/notfound.error";
 import UnauthorisedError from "../errors/unauthorisedError";
 import AdminRespository from "../repositories/admin.repository"
-import bcrypt from "bcrypt-ts"
+import bcrypt from "bcryptjs"
 import { generateAccessToken, generateRefreshToken } from "../utils/auth.utils";
 import type { Admins } from "@prisma/client";
 import { JwtPayload } from "../types/jwtPayload";
