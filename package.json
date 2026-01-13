@@ -7,7 +7,7 @@
     "build": "prisma generate && tsc",
     "watch": "npx tsc -w",
     "prestart": "npm run build",
-    "start": "npx nodemon dist/src/index.js",
+    "start": "npx nodemon dist/index.js",
     "dev": "npx concurrently --kill-others \"npm run watch\" \"npm start\"",
     "postinstall": "npx prisma generate"
   },
