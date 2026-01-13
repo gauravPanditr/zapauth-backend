@@ -14,12 +14,12 @@ class ProjectService{
       throw new Error("Required fields are missing");
     }
 
-    // Optional: email validation
+  
     if (!dto.appEmail.includes("@")) {
       throw new Error("Invalid app email");
     }
 
-    // Call repository
+   
     const project = await this.projectrepository.createProject(dto);
 
     return project;
@@ -28,6 +28,11 @@ class ProjectService{
        const updateproject=await this.projectrepository.updateProject(dto);
        return updateproject;
    }
+   async deleteProjectById(id:string){
+    const deleteproject=await this.projectrepository.deleteByProjectId(id);
+    return deleteproject;
+   }
+   
 }
 
 export default ProjectService;

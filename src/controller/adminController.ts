@@ -7,7 +7,7 @@ import { unknownErrorResponse } from "../utils/response.utils";
 
 const adminService = new AdminService(new AdminRepository());
 
-export const createAdmin = async (req: Request, res: Response) => {
+const createAdmin = async (req: Request, res: Response) => {
   try {
     const response = await adminService.createAdmin(req.body);
     return res.json(response);
@@ -15,26 +15,33 @@ export const createAdmin = async (req: Request, res: Response) => {
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
-const loginAdmin = async (req: Request, res: Response) => {
-    try {
-        const response = await adminService.loginAdmin(req.body);
-        return res.status(201).json({
-            message: 'Successfully logged in the admin',
-            data: response,
-            err: {},
-            success: true
-        })
-    } catch(error: any) {
-        if(error instanceof GenericError) {
-            return res.status(error.statusCode).json({
-                message: 'Something went wrong',
-                data: {},
-                err: error,
-                success: true
-            })
-        }
-        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(unknownErrorResponse);
+ const loginAdmin = async (req: Request, res: Response) => {
+  try {
+    const tokens = await adminService.loginAdmin(req.body);
+
+    return res.status(StatusCodes.CREATED).json({
+      message: "Successfully logged in the admin",
+      data: {
+        accessToken: tokens.accessToken,
+        refreshToken: tokens.refreshToken,
+      },
+      err: {},
+      success: true,
+    });
+  } catch (error: any) {
+    if (error instanceof GenericError) {
+      return res.status(error.statusCode).json({
+        message: error.message,
+        data: {},
+        err: error,
+        success: false,
+      });
     }
+
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json(unknownErrorResponse);
+}
 }
 const getById = async (req: Request, res: Response) => {
     try {

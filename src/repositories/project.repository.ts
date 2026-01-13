@@ -1,3 +1,4 @@
+import { Project } from "../../generated/prisma/client";
 import { prisma } from "../config/dbConfig";
 import { CreateProjectDTO } from "../dtos/createProjectdto";
 import { UpdateProjectDTO } from "../dtos/updateProject.dto";
@@ -20,23 +21,27 @@ class ProjectRespository{
    async updateProject(dto: UpdateProjectDTO) {
     const data: any = {};
 
-    if (dto.projectName !== undefined) {
-      data.projectName = dto.projectName;
-    }
-
-    if (dto.appName !== undefined) {
-      data.appName = dto.appName;
-    }
-
-    if (dto.appEmail !== undefined) {
-      data.appEmail = dto.appEmail;
-    }
 
     return prisma.project.update({
       where: { id: dto.id },
       data,
     });
   }
+  async deleteByProjectId(id:string){
+    return prisma.project.delete({
+      where:{id}
+    });
+
+
+  }
+  
+
+async getAllProjectsByAdmin(adminId: string): Promise<Project[]> {
+  return prisma.project.findMany({
+    where: { ownerId: adminId }, 
+    orderBy: { createdAt: 'desc' } 
+  });
+}
 }
 
 
