@@ -4,12 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "npx tsc ",
+    "build":"prisma generate && tsc",
     "watch": "npx tsc -w",
     "prestart": "npm run build",
     "start": "npx nodemon dist/src/index.js",
     "dev": "npx concurrently --kill-others \"npm run watch\" \"npm start\"",
-     "postinstall": "npx prisma generate"
+    "postinstall": "npx prisma generate"
   },
   "repository": {
     "type": "git",
