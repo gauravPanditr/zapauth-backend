@@ -49,6 +49,12 @@ class AdminRespository {
   async deleteRefreshToken(token: string): Promise<RefreshToken> {
     return prisma.refreshToken.delete({ where: { token } });
   }
+  async getAdminByRefreshToken(token: string): Promise<Admins | null> {
+  return prisma.admins.findFirst({
+    where: { refreshTokens: { some: { token } } },
+  });
+}
+
 }
 
 export default AdminRespository;

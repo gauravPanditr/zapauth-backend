@@ -8,6 +8,7 @@ import bcrypt from "bcryptjs"
 import { generateAccessToken, generateRefreshToken } from "../utils/auth.utils";
 import type { Admins } from "@prisma/client";
 import { JwtPayload } from "../types/jwtPayload";
+import { verify } from "jsonwebtoken";
 class AdminService {
 
     private adminRepository: AdminRespository
@@ -75,6 +76,33 @@ class AdminService {
         }
     }
 
+      async refreshTokens(refreshToken: string) {
+    if (!refreshToken) throw new UnauthorisedError("Refresh token missing");
+
+    // 1. Find admin with this refresh token
+    const admin = await this.adminRepository.getAdminByRefreshToken(refreshToken);
+    if (!admin) throw new UnauthorisedError("Invalid refresh token");
+
+    try {
+      // 2. Verify the refresh token
+      const payload = verify(refreshToken, process.env.REFRESH_TOKEN_SECRET!) as JwtPayload;
+
+      // 3. Generate new tokens
+      const newAccessToken = generateAccessToken(payload);
+      const newRefreshToken = generateRefreshToken(payload);
+
+      // 4. Save new refresh token in DB
+      await this.adminRepository.saveRefreshToken(
+        newRefreshToken,
+        admin.id,
+        new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+      );
+
+      return { accessToken: newAccessToken, refreshToken: newRefreshToken };
+    } catch (err) {
+      throw new UnauthorisedError("Invalid refresh token");
+    }
+  }
 }
 
 

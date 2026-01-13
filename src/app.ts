@@ -10,8 +10,8 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
 
 app.use('/api', apiRouter);
-app.get('/ping', ( res: Response) => {
-    res.status(200).json({msg: 'ok with changes'});
-}); 
+app.get("/ping", ( res: Response) => {
+  res.status(200).json({ msg: "ok with changes" });
+});
 export const handler = serverless(app);
 export default app;

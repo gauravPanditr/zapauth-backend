@@ -61,9 +61,18 @@ const getById = async (req: Request, res: Response) => {
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(unknownErrorResponse);
     }
 }
-
+ const refreshToken = async (req: Request, res: Response) => {
+  const { refreshToken } = req.body; // or from cookie
+  try {
+    const tokens = await adminService.refreshTokens(refreshToken);
+    res.json(tokens);
+  } catch (err) {
+    res.status(401).json({ message: "Unauthorized" });
+  }
+}
 export default {
     createAdmin,
     loginAdmin,
-    getById
+    getById,
+    refreshToken
 }
