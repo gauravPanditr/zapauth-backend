@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "npx tsc",
+    "build": "prisma generate && tsc ",
     "watch": "npx tsc -w",
     "prestart": "npm run build",
     "start": "npx nodemon dist/src/index.js",
