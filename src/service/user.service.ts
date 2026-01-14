@@ -1,9 +1,11 @@
 
+
 import { prisma } from "../config/dbConfig";
 import CreateUserDTO from "../dtos/createUser.dto";
 import UserRepository from "../repositories/user.repository";
 import bcrypt from "bcryptjs"
 
+console.log("Hello Navya Ji")
 
 class UserService{
   private userRepository: UserRepository
@@ -11,18 +13,27 @@ class UserService{
         this.userRepository = userRepository;
     }
     
+   
+   
+  async createUser(dto: CreateUserDTO, projectId: string, projectKey: string){
+    
+     const project = await prisma.project.findUnique({
+      where: { id: projectId },
+    });
 
-  async createUser(dto : CreateUserDTO){
-     const projectId= await prisma.project.findUnique({
-        where:{id:dto.projectId},
-        select:{id:true}
-     })
-     if (!projectId) {
+    if (!project) {
       throw new Error("Project not found");
     }
-      dto.password=bcrypt.hashSync(dto.password);
-      const user=await this.userRepository.createUser(dto);
-      return user;
+
+    if (project.projectKey!== projectKey) {
+      throw new Error("Invalid project key");
+    }
+
+    // Hash password
+    dto.password = bcrypt.hashSync(dto.password, 10);
+
+    // Create user
+    return this.userRepository.createUser(dto, projectId);
   }
   
 }

@@ -5,15 +5,12 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
-  IsUUID,
+  
   MinLength,
 } from "class-validator";
 
 export default class CreateUserDTO {
-  @IsUUID()
-  @IsNotEmpty()
-  @IsString()
-  projectId: string;
+  
 
   @IsOptional()
   @IsString()
@@ -41,7 +38,7 @@ export default class CreateUserDTO {
   tokenExpiry?: Date; // <-- added ?
 
   constructor(
-    projectId: string,
+    
     email: string,
     password: string,
     username: string,
@@ -49,7 +46,7 @@ export default class CreateUserDTO {
     token?: string,
     tokenExpiry?: Date
   ) {
-    this.projectId = projectId;
+    
     this.email = email;
     this.password = password;
     this.username = username;

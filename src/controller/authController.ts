@@ -1,15 +1,27 @@
 import { Request, Response } from "express";
 import UserRepository from "../repositories/user.repository";
 import UserService from "../service/user.service";
+import CreateUserDTO from "../dtos/createUser.dto";
 const userService = new UserService(new UserRepository());
 
 const createUser=async(req:Request,res:Response)=>{
-     try {
-        const response= await userService.createUser(req.body);
-         return res.json(response);
-     } catch (error) {
-         return res.status(500).json({ error: "Internal Server Error" });
-     }
+    try {
+    const projectId = req.headers["project-id"] as string;
+    const projectKey = req.headers["project-key"] as string;
+
+    if (!projectId || !projectKey) {
+      return res.status(401).json({ error: "Project credentials missing" });
+    }
+
+    const dto: CreateUserDTO = req.body;
+
+    const user = await userService.createUser(dto, projectId, projectKey);
+
+    return res.status(201).json(user);
+  } catch (err: any) {
+    console.error(err);
+    return res.status(400).json({ error: err.message });
+  }
 }
 
 
