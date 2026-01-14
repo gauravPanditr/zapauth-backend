@@ -13,6 +13,27 @@ const projectService = new ProjectService(new ProjectRespository());
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+const getAllProjectsByAdmin=async(req:Request,res:Response)=>{
+    try {
+        const { id } = req.params;
+           if (!id) {
+               return res.status(StatusCodes.BAD_REQUEST).json({
+                   message: 'Project ID is required',
+                   data: {},
+                   err: {},
+                   success: false
+               });
+           }
+       
+      const response=await projectService.getAllProjectsByAdmin(id);
+      return  res.status(201).json(response);
+
+    } catch (error) {
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+}
+
 const updateProject=async(req:Request,res:Response)=>{
    try {
     const response=await projectService.updateProject(req.body);
@@ -43,6 +64,7 @@ try {
 export default{
     createProject,
     updateProject,
-    deleteProjectById
+    deleteProjectById,
+    getAllProjectsByAdmin
 }
 

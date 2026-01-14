@@ -13,17 +13,16 @@ class ProjectService{
      if (!dto.projectName || !dto.appName || !dto.appEmail) {
       throw new Error("Required fields are missing");
     }
-
-  
-    if (!dto.appEmail.includes("@")) {
-      throw new Error("Invalid app email");
-    }
-
-   
+    
     const project = await this.projectrepository.createProject(dto);
 
     return project;
    } 
+   
+   async getAllProjectsByAdmin(adminId:string){
+     return await this.projectrepository.getAllProjectsByAdmin(adminId);
+   }
+
    async updateProject(dto:UpdateProjectDTO){
        const updateproject=await this.projectrepository.updateProject(dto);
        return updateproject;

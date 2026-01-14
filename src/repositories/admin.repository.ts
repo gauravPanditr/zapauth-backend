@@ -30,6 +30,7 @@ class AdminRespository {
     const admin = await prisma.admins.findUnique({ where: { id } });
     return admin;
   }
+  
 
  async saveRefreshToken(
     token: string,
