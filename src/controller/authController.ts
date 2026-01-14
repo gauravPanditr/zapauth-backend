@@ -8,7 +8,7 @@ const createUser=async(req:Request,res:Response)=>{
     try {
     const projectId = req.headers["project-id"] as string;
     const projectKey = req.headers["project-key"] as string;
-
+        
     if (!projectId || !projectKey) {
       return res.status(401).json({ error: "Project credentials missing" });
     }
