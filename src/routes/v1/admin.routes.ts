@@ -10,7 +10,10 @@ adminrouter.post("/signup",adminController.createAdmin);
 //login
 adminrouter.post("/login",adminController.loginAdmin);
 
+
 adminrouter.get("/:id",adminController.getById);
+
+
 adminrouter.post('/refresh',adminController.refreshToken)
 
 export default adminrouter;

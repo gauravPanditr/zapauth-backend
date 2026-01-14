@@ -52,7 +52,7 @@ export default class CreateUserDTO {
     this.projectId = projectId;
     this.email = email;
     this.password = password;
-     this.username = username;
+    this.username = username;
     if (isVerified !== undefined) this.isVerified = isVerified;
     if (token) this.token = token;
     if (tokenExpiry) this.tokenExpiry = tokenExpiry;

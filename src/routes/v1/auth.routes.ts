@@ -1,13 +1,13 @@
 
-// import { Router } from "express";
-// import { signup, login } from "../controller/authController";
+import { Router } from "express";
+import authController from "../../controller/authController";
 
-// const router = Router();
+const router = Router();
 
-// // User signup under project
-// router.post("/signup", signup);
+// User signup under project
+router.post("/signup", authController.createUser);
 
-// // User login under project
+// User login under project
 // router.post("/login", login);
 
-// export default router;
+export default router;

@@ -1,5 +1,4 @@
 import type { Project } from "@prisma/client";
-
 import { prisma } from "../config/dbConfig";
 import { CreateProjectDTO } from "../dtos/createProjectdto";
 import { UpdateProjectDTO } from "../dtos/updateProject.dto";
@@ -35,7 +34,11 @@ class ProjectRespository{
 
 
   }
-  
+  async getProjectById(id:string){
+    return prisma.project.findUnique({
+      where :{id}
+    })
+  }
 
 async getAllProjectsByAdmin(adminId: string): Promise<Project[]> {
   return prisma.project.findMany({

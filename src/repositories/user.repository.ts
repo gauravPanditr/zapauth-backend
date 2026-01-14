@@ -7,16 +7,6 @@ class UserRepository{
 
 async createUser(dto:CreateUserDTO) :Promise<User>{
     
-     const projectId=await prisma.project.findUnique({
-        where :{id:dto.projectId},
-        select:{id:true}
-
-     });
-     
-    if (!projectId) {
-      throw new Error("Project not found");
-
-    }
      return prisma.user.create({
       data: {
         projectId: dto.projectId,
@@ -30,7 +20,18 @@ async createUser(dto:CreateUserDTO) :Promise<User>{
     });
 
 }
-
+async findUserByEamiId(userEmail:string){
+     const email=await prisma.user.findFirst({
+      where:{email:userEmail}
+     })
+    return email;
+}
+async findUserById(id:string){
+   const userId=await prisma.user.findUnique({
+    where:{id}
+   });
+   return userId;
+}
 
 
 }
