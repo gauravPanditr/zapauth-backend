@@ -1,4 +1,4 @@
-import { CreateUserDTO } from "../dtos/createUser.dto";
+import CreateUserDTO from "../dtos/createUser.dto";
 
 
 import { prisma } from "../config/dbConfig";
@@ -24,8 +24,8 @@ async createUser(dto:CreateUserDTO) :Promise<User>{
         email: dto.email,
         password: dto.password, 
         isVerified: dto.isVerified ?? false,
-        token: dto.token,
-        tokenExpiry: dto.tokenExpiry,
+        token: dto.token ?? null,
+        tokenExpiry: dto.tokenExpiry ?? null,
       },
     });
 

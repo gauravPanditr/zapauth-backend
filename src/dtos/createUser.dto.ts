@@ -1,5 +1,6 @@
 import {
   IsBoolean,
+  IsDate,
   IsEmail,
   IsNotEmpty,
   IsOptional,
@@ -8,20 +9,20 @@ import {
   MinLength,
 } from "class-validator";
 
-export class CreateUserDTO {
+export default class CreateUserDTO {
   @IsUUID()
   @IsNotEmpty()
   @IsString()
-  projectId :string ;
+  projectId: string;
 
   @IsOptional()
   @IsString()
-  username?: string;
+  username: string; 
 
   @IsEmail()
   @IsString()
   @IsNotEmpty()
-  email: string | undefined; 
+  email: string;
 
   @IsString()
   @MinLength(6)
@@ -29,12 +30,31 @@ export class CreateUserDTO {
 
   @IsOptional()
   @IsBoolean()
-  isVerified?: boolean;
+  isVerified?: boolean; // optional
 
   @IsOptional()
   @IsString()
-  token?: string;
+  token?: string; // <-- added ?
 
   @IsOptional()
-  tokenExpiry?: Date;
+  @IsDate()
+  tokenExpiry?: Date; // <-- added ?
+
+  constructor(
+    projectId: string,
+    email: string,
+    password: string,
+    username: string,
+    isVerified?: boolean,
+    token?: string,
+    tokenExpiry?: Date
+  ) {
+    this.projectId = projectId;
+    this.email = email;
+    this.password = password;
+     this.username = username;
+    if (isVerified !== undefined) this.isVerified = isVerified;
+    if (token) this.token = token;
+    if (tokenExpiry) this.tokenExpiry = tokenExpiry;
+  }
 }
