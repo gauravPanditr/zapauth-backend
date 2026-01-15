@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import UserRepository from "../repositories/user.repository";
 import UserService from "../service/user.service";
 import CreateUserDTO from "../dtos/createUser.dto";
+
 const userService = new UserService(new UserRepository());
 
 const createUser=async(req:Request,res:Response)=>{
