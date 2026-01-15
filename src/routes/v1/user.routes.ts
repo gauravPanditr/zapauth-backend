@@ -1,11 +1,11 @@
 
 import { Router } from "express";
-import authController from "../../controller/userController";
+import userController from "../../controller/userController";
 
 const router = Router();
 
 // User signup under project
-router.post("/signup", authController.createUser);
+router.post("/signup", userController.createUser);
 
 // User login under project
 // router.post("/login", login);

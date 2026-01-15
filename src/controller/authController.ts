@@ -19,7 +19,7 @@ const authService = new AuthService(
     if (!projectId) {
       return res.status(400).json({ message: "Project ID missing" });
     }
-    console.log(projectId);
+   
     
     const result = await authService.login(
       email,
@@ -32,7 +32,7 @@ const authService = new AuthService(
         deviceType: DeviceType.desktop,
       }
     );
-    console.log(result);
+  
     
     return res.status(200).json(result);
   } catch (err: any) {

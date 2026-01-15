@@ -15,9 +15,10 @@ const createUser=async(req:Request,res:Response)=>{
     }
 
     const dto: CreateUserDTO = req.body;
-
+      console.log(dto)
     const user = await userService.createUser(dto, projectId, projectKey);
-
+    console.log(user);
+    
     return res.status(201).json(user);
   } catch (err: any) {
     console.error(err);
