@@ -1,23 +1,20 @@
 generator client {
   provider = "prisma-client-js"
-  
-  
 }
 
 datasource db {
   provider = "postgresql"
-  
 }
 
 model Admins {
-  id        String    @id @default(uuid())
-  v         Int       @default(0) @map("__v")
-  createdAt DateTime  @default(now())
-  email     String    @unique
-  username  String
-  password  String
-  updatedAt DateTime  @updatedAt
-  projects  Project[]      @relation("AdminsToProjects")
+  id            String         @id @default(uuid())
+  v             Int            @default(0) @map("__v")
+  createdAt     DateTime       @default(now())
+  email         String         @unique
+  username      String
+  password      String
+  updatedAt     DateTime       @updatedAt
+  projects      Project[]      @relation("AdminsToProjects")
   refreshTokens RefreshToken[]
 }
 
@@ -25,9 +22,9 @@ model RefreshToken {
   id        String   @id @default(uuid())
   token     String   @unique
   adminId   String
-  admin     Admins   @relation(fields: [adminId], references: [id])
   createdAt DateTime @default(now())
   expiresAt DateTime
+  admin     Admins   @relation(fields: [adminId], references: [id])
 }
 
 model Project {
@@ -40,62 +37,37 @@ model Project {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   owner       Admins   @relation("AdminsToProjects", fields: [ownerId], references: [id])
-users User[]
-
-  
-
-  sessions Session[]
+  users       User[]
 }
+
 model User {
   id          String    @id @default(uuid())
-  project     Project   @relation(fields: [projectId], references: [id])
   projectId   String
-  username    String   @db.VarChar(255)
+  username    String    @db.VarChar(255)
   email       String    @unique
-  password    String   @db.VarChar(255)
+  password    String    @db.VarChar(255)
   isVerified  Boolean   @default(false)
-  token       String?  @db.VarChar(255)
+  token       String?   @db.VarChar(255)
   tokenExpiry DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
-  
-  
-
-  sessions Session[]
+  sessions    Session[]
+  project     Project   @relation(fields: [projectId], references: [id])
 }
+
 model Session {
   id                 String   @id @default(uuid())
-
-
-  projectId          String
-  project            Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
-
-  // 🔗 User
   userId             String
-  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  // 🔐 Tokens
-  accessToken        String   @unique @db.VarChar(512)
+  projectId          String
+  accessToken        String   @unique
   accessTokenExpiry  DateTime
-
-  refreshToken       String   @db.VarChar(512)
+  refreshToken       String   @unique
   refreshTokenExpiry DateTime
-
-  
-  userAgent          String   @db.VarChar(512)
-  os                 String   @db.VarChar(100)
-  deviceType         DeviceType
-  networkIP          String  @db.VarChar(50)
-
+  deviceType         String
+  userAgent          String
+  ipAddress          String?
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
-
+  os                 String?
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
-
-enum DeviceType {
-  MOBILE
-  TABLET
-  DESKTOP
-  OTHER
-}
-

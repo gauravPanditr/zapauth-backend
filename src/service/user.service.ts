@@ -10,7 +10,7 @@ class UserService{
         this.userRepository = userRepository;
     }
     
-   
+    
    
   async createUser(dto: CreateUserDTO, projectId: string, projectKey: string){
     
@@ -32,7 +32,15 @@ class UserService{
     // Create user
     return this.userRepository.createUser(dto, projectId);
   }
+ async findByEmail(
+    email: string,
+    projectId: string
+  ){
+     const user = await this.userRepository.findByEmail(email, projectId);
+if (!user) throw new Error("Invalid credentials");
+ return user;
 
+  }
 
   async getUserById(id:string){
     const userId=await this.userRepository.findUserById(id);

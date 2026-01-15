@@ -13,6 +13,7 @@ ALTER COLUMN "password" SET NOT NULL;
 CREATE TABLE "Session" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
+    "projectId" TEXT NOT NULL,
     "accessToken" TEXT NOT NULL,
     "accessTokenExpiry" TIMESTAMP(3) NOT NULL,
     "refreshToken" TEXT NOT NULL,
@@ -22,6 +23,7 @@ CREATE TABLE "Session" (
     "ipAddress" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "os" TEXT,
 
     CONSTRAINT "Session_pkey" PRIMARY KEY ("id")
 );

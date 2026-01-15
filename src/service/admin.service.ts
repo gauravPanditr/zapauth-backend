@@ -5,9 +5,9 @@ import NotFoundError from "../errors/notfound.error";
 import UnauthorisedError from "../errors/unauthorisedError";
 import AdminRespository from "../repositories/admin.repository"
 import bcrypt from "bcryptjs"
-import { generateAccessToken, generateRefreshToken } from "../utils/auth.utils";
+import { generateAccessToken, generateRefreshToken } from "../utils/auth.admin.utils";
 import type { Admins } from "@prisma/client";
-import { JwtPayload } from "../types/jwtPayload";
+import  {JwtPayload} from "../types/jwtPayload"
 import { verify } from "jsonwebtoken";
 import serverConfig from "../config"
 

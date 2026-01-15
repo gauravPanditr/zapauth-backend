@@ -20,6 +20,18 @@ async createUser(dto:CreateUserDTO,projectId: string) :Promise<User>{
     });
 
 }
+ async findByEmail(
+    email: string,
+    projectId: string
+  ): Promise<User | null> {
+    return prisma.user.findFirst({
+      where: {
+        email,
+        projectId,
+      },
+    });
+  }
+
 async findUserByEamiId(userEmail:string){
      const email=await prisma.user.findFirst({
       where:{email:userEmail}
@@ -32,6 +44,7 @@ async findUserById(id:string){
    });
    return userId;
 }
+
 
 
 }

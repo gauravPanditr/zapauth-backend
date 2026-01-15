@@ -1,7 +1,8 @@
 import jwt from "jsonwebtoken";
 import serverConfig from "../config";
-import JwtDecodedUser from "../types/JwtDecodedUser";
-import { JwtPayload } from "../types/jwtPayload";
+
+import  {JwtPayload}  from "../types/jwtPayload";
+import { JwtDecodedAdmin } from "../types/JwtDecodedUser";
 // ================================
 // JWT Payload type (just an interface, no DTO import)
 // ================================
@@ -13,9 +14,9 @@ export function generateJWT(payload: JwtPayload): string {
   return jwt.sign(payload, serverConfig.JWT_SECRET, { expiresIn: "1h" });
 }
 
-export function verifyToken(token: string): JwtDecodedUser {
+export function verifyToken(token: string): JwtDecodedAdmin {
   const decoded = jwt.verify(token, serverConfig.JWT_SECRET);
-  return decoded as JwtDecodedUser;
+  return decoded as JwtDecodedAdmin;
 }
 
 // ================================
@@ -39,13 +40,14 @@ export function generateRefreshToken(payload: JwtPayload): string {
 // ================================
 // Verify Access Token
 // ================================
-export function verifyAccessToken(token: string): JwtDecodedUser {
-  return jwt.verify(token, serverConfig.ACCESS_TOKEN_SECRET) as JwtDecodedUser;
+export function verifyAccessToken(token: string): JwtDecodedAdmin {
+  return jwt.verify(token, serverConfig.ACCESS_TOKEN_SECRET) as JwtDecodedAdmin;
 }
 
 // ================================
 // Verify Refresh Token
 // ================================
-export function verifyRefreshToken(token: string): JwtDecodedUser {
-  return jwt.verify(token, serverConfig.REFRESH_TOKEN_SECRET) as JwtDecodedUser;
+export function verifyRefreshToken(token: string): JwtDecodedAdmin {
+  return jwt.verify(token, serverConfig.REFRESH_TOKEN_SECRET) as JwtDecodedAdmin;
 }
+

@@ -1,31 +1,44 @@
 import { Request, Response } from "express";
-import UserRepository from "../repositories/user.repository";
+import AuthService from "../service/user.auth.service";
 import UserService from "../service/user.service";
-import CreateUserDTO from "../dtos/createUser.dto";
+import SessionService from "../service/session.service";
+import UserRepository from "../repositories/user.repository";
+import SessionRepository from "../repositories/session.repository";
+import { DeviceType } from "../types/device";
 
-const userService = new UserService(new UserRepository());
+const authService = new AuthService(
+  new UserService(new UserRepository()),
+  new SessionService(new SessionRepository())
+);
 
-const createUser=async(req:Request,res:Response)=>{
-    try {
-    const projectId = req.headers["project-id"] as string;
-    const projectKey = req.headers["project-key"] as string;
-        
-    if (!projectId || !projectKey) {
-      return res.status(401).json({ error: "Project credentials missing" });
+ const login = async (req: Request, res: Response) => {
+  try {
+    const { email, password } = req.body;
+    
+    const projectId = req.headers["x-project-id"] as string;
+    if (!projectId) {
+      return res.status(400).json({ message: "Project ID missing" });
     }
-
-    const dto: CreateUserDTO = req.body;
-
-    const user = await userService.createUser(dto, projectId, projectKey);
-
-    return res.status(201).json(user);
+    console.log(projectId);
+    
+    const result = await authService.login(
+      email,
+      password,
+      projectId,
+      {
+        userAgent: req.headers["user-agent"] || "unknown",
+        os: req.headers["sec-ch-ua-platform"]?.toString() || "unknown",
+        ip: req.ip || "0.0.0.0",
+        deviceType: DeviceType.desktop,
+      }
+    );
+    console.log(result);
+    
+    return res.status(200).json(result);
   } catch (err: any) {
-    console.error(err);
-    return res.status(400).json({ error: err.message });
+    return res.status(401).json({ message: err.message });
   }
-}
-
-
+};
 export default{
-    createUser
+  login
 }
