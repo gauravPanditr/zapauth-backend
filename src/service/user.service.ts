@@ -1,8 +1,9 @@
-import { prisma } from "../config/dbConfig";
 import CreateUserDTO from "../dtos/createUser.dto";
+import ProjectRespository from "../repositories/project.repository";
 import UserRepository from "../repositories/user.repository";
 import bcrypt from "bcryptjs"
 
+const projectRespository=new ProjectRespository();
 
 class UserService{
   private userRepository: UserRepository
@@ -14,9 +15,7 @@ class UserService{
    
   async createUser(dto: CreateUserDTO, projectId: string, projectKey: string){
     
-     const project = await prisma.project.findUnique({
-      where: { id: projectId },
-    });
+     const project = await projectRespository.getProjectById(projectId);
 
     if (!project) {
       throw new Error("Project not found");

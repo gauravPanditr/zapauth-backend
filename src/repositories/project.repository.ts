@@ -27,11 +27,16 @@ class ProjectRespository{
       data,
     });
   }
+  async getProjectByKey(key:string){
+     return prisma.project.findMany({
+      where:{projectKey:key}
+     })
+  }
   async deleteByProjectId(id:string){
     return prisma.project.delete({
       where:{id}
     });
-
+  
 
   }
   async getProjectById(id:string){
