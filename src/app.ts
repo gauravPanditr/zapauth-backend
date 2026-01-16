@@ -3,8 +3,14 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import serverless  from "serverless-http"
 import apiRouter from './routes';
+import cors from "cors";
 const app : Express = express();
-
+app.use(
+  cors({
+    credentials: true,
+    origin:true
+  })
+);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
