@@ -15,7 +15,7 @@ export default class LoginAdminDto {
     @Length(3, 50)
     @IsString()
     password: string;
-
+    
    
 
 

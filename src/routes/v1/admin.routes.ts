@@ -10,6 +10,7 @@ adminrouter.post("/signup",adminController.createAdmin);
 //login
 adminrouter.post("/login",adminController.loginAdmin);
 
+adminrouter.get("/me",adminController.getMe);
 
 adminrouter.get("/:id",adminController.getById);
 

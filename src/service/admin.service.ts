@@ -5,7 +5,7 @@ import NotFoundError from "../errors/notfound.error";
 import UnauthorisedError from "../errors/unauthorisedError";
 import AdminRespository from "../repositories/admin.repository"
 import bcrypt from "bcryptjs"
-import { generateAccessToken, generateRefreshToken } from "../utils/auth.admin.utils";
+import { generateAccessToken, generateRefreshToken ,verifyAccessToken} from "../utils/auth.admin.utils";
 import type { Admins } from "@prisma/client";
 import  {JwtPayload} from "../types/jwtPayload"
 import { verify } from "jsonwebtoken";
@@ -65,6 +65,25 @@ class AdminService {
       refreshToken,
     };
   }
+
+    async getAdminFromAccessToken(accessToken: string): Promise<Admins> {
+    let payload: JwtPayload;
+
+    try {
+      payload = verifyAccessToken(accessToken);
+    } catch {
+      throw new UnauthorisedError("Invalid or expired access token");
+    }
+
+    const admin = await this.adminRepository.getAdminById(payload.id);
+    if (!admin) {
+      throw new NotFoundError("admin", payload.id);
+    }
+
+    return admin;
+  }
+
+
     async getAdminById(id: string): Promise<Admins> {
         try {
             const response: Admins | null = await this.adminRepository.getAdminById(id);
@@ -77,7 +96,7 @@ class AdminService {
             throw error;
         }
     }
- 
+    
 
     async refreshTokens(refreshToken: string) {
       
