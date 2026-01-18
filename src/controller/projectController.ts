@@ -5,6 +5,7 @@ import { Request, Response } from "express";
 import { CreateProjectDTO } from "../dtos/createProjectdto";
 import UnauthorisedError from "../errors/unauthorisedError";
 import { AuthenticatedAdminRequest } from "../types/RequestWithUser";
+import { AuthenticatedProjectRequest } from "../types/authenticatedRequest";
 
 const projectService = new ProjectService(new ProjectRespository());
 
@@ -40,7 +41,42 @@ const projectService = new ProjectService(new ProjectRespository());
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
+const createNewProjectKey = async (
+  req: AuthenticatedProjectRequest,
+  res: Response
+) => {
+  try {
+    
+    const projectId = req.project?.id;
+ 
+    if (!projectId) {
+      return res.status(400).json({
+        message: "Project ID missing from request",
+      });
+    }
+   console.log(projectId);
+   
+    
+    const updatedProject = await projectService.updateProjectKey(projectId);
 
+    // 3️⃣ Send response
+    return res.status(200).json({
+      success: true,
+      message: "New project key generated successfully",
+      data: {
+        projectId: updatedProject.id,
+        projectKey: updatedProject.projectKey,
+      },
+    });
+  } catch (error: any) {
+    console.error("CreateNewProjectKey Error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: error.message || "Internal server error",
+    });
+  }
+};
 const getAllProjectsByAdmin=async(req:Request,res:Response)=>{
     try {
         const { id } = req.params;
@@ -92,6 +128,7 @@ export default{
     createProject,
     // updateProject,
     deleteProjectById,
-    getAllProjectsByAdmin
+    getAllProjectsByAdmin,
+    createNewProjectKey
 }
 

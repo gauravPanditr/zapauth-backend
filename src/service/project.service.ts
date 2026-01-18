@@ -30,32 +30,24 @@ async createProject(dto: CreateProjectDTO, adminId: string): Promise<Project> {
 }
  
 
-async updateProjectKey(projectId: string, adminId: string): Promise<Project> {
-  
+async updateProjectKey(projectId: string):Promise<Project>{
   const project = await this.projectrepository.getProjectById(projectId);
 
   if (!project) {
     throw new Error("Project not found");
   }
 
-  if (project.ownerId !== adminId) {
-    throw new Error("Unauthorized to regenerate project key");
-  }
-
-  
   const newProjectKey = jwt.sign(
-    { projectId: project.id, ownerId: adminId },
+    { projectId: project.id },
     serverConfig.PROJECT_KEY_GENERATION_SECRET
   );
 
-  
-  const updatedProject = await this.projectrepository.updateProjectKey(
+  return this.projectrepository.updateProjectKey(
     project.id,
     newProjectKey
   );
-
-  return updatedProject;
 }
+
 
    
    async getAllProjectsByAdmin(adminId:string){

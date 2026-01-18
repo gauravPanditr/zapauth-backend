@@ -36,9 +36,9 @@ export const validateProject=async(req:AuthenticatedProjectRequest,res: Response
       throw new Error("Project key does not belong to this project");
     }
 
-    return {
-      id: project.id,
-      key: projectKey,
-    };
+  req.project = {
+  id: project.id,
+  key: projectKey,
+};
    next();
   }
