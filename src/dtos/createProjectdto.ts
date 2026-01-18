@@ -15,19 +15,12 @@ export class CreateProjectDTO {
 
   appEmail: string;
 
-  @IsNotEmpty({ message: "Project key is required" })
   
-  projectKey: string;
-
-  @IsNotEmpty({ message: "Owner ID is required" })
-  owner: string;
-
  
   constructor(data: Partial<CreateProjectDTO>) {
     this.projectName = data.projectName ?? "";
     this.appName = data.appName ?? "";
     this.appEmail = data.appEmail ?? "";
-    this.projectKey = data.projectKey ?? "";
-    this.owner = data.owner ?? "";
+    
   }
 }
