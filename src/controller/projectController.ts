@@ -4,33 +4,31 @@ import ProjectService from "../service/project.service";
 import { Request, Response } from "express";
 import { CreateProjectDTO } from "../dtos/createProjectdto";
 import UnauthorisedError from "../errors/unauthorisedError";
+import { AuthenticatedAdminRequest } from "../types/RequestWithUser";
 
 const projectService = new ProjectService(new ProjectRespository());
 
- const createProject = async (req: Request, res: Response) => {
+ const createProject = async (req:AuthenticatedAdminRequest, res: Response) => {
   try {
     
-   
-    const admin = (req as any).admin;
+     const adminId = req.admin?.id;
 
-    if (!admin?.id) {
+    if (!adminId) {
       throw new UnauthorisedError("Unauthorized");
     }
 
-    const adminId = admin.id;
-    console.log("Logged in adminId:", adminId);
-
-    // 2️⃣ Create DTO from request body
+  
+   
     const dto = new CreateProjectDTO(req.body);
     console.log("Project DTO:", dto);
 
-    // 3️⃣ Call service to create project
+
     const project = await projectService.createProject(dto, adminId);
 
-    // 4️⃣ Send response
+  
     return res.status(201).json({
       success: true,
-      message: "Project created successfully ✅",
+      message: "Project created successfully ",
       data: project,
     });
   } catch (err: any) {
