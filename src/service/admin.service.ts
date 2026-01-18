@@ -11,6 +11,7 @@ import  {JwtPayload} from "../types/jwtPayload"
 import { verify } from "jsonwebtoken";
 import serverConfig from "../config"
 
+
 class AdminService {
 
     private adminRepository: AdminRespository
@@ -52,7 +53,8 @@ class AdminService {
     const accessToken = generateAccessToken(payload);
     const refreshToken = generateRefreshToken(payload);
 
-  
+    
+    
     await this.adminRepository.saveRefreshToken(
       refreshToken,
       admin.id,
@@ -66,11 +68,13 @@ class AdminService {
     };
   }
 
-    async getAdminFromAccessToken(accessToken: string): Promise<Admins> {
+    async getAdminFromAccessToken(accessToken: string) {
     let payload: JwtPayload;
 
     try {
       payload = verifyAccessToken(accessToken);
+      
+      
     } catch {
       throw new UnauthorisedError("Invalid or expired access token");
     }

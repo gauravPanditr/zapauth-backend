@@ -44,20 +44,24 @@ const createAdmin = async (req: Request, res: Response) => {
       .json(unknownErrorResponse);
 }
 }
-const  getMe=(req:Request, res:Response)=> {
+const getMe = async (req: Request, res: Response) => {
   const authHeader = req.headers.authorization;
+
   if (!authHeader?.startsWith("Bearer ")) {
     throw new UnauthorisedError("Access token missing");
   }
 
   const token = authHeader.split(" ")[1];
+  console.log(token);
+
   if (!token) {
     throw new UnauthorisedError("Access token missing");
   }
-  const admin = adminService.getAdminFromAccessToken(token);
 
-  res.json(admin);
-}
+  const admin = await adminService.getAdminFromAccessToken(token);
+
+  return res.status(200).json(admin);
+};
 
 const getById = async (req: Request, res: Response) => {
     try {
