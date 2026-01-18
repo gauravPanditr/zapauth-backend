@@ -2,7 +2,6 @@ import type { Project } from "@prisma/client";
 import { prisma } from "../config/dbConfig";
 import { CreateProjectDTO } from "../dtos/createProjectdto";
 
-
 class ProjectRespository{
   async createProject(dto: CreateProjectDTO, adminId: string) {
     const project = await prisma.project.create({

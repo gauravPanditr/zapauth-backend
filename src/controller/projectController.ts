@@ -16,10 +16,7 @@ const projectService = new ProjectService(new ProjectRespository());
     if (!adminId) {
       throw new UnauthorisedError("Unauthorized");
     }
-
-  
-   
-    const dto = new CreateProjectDTO(req.body);
+  const dto = new CreateProjectDTO(req.body);
     console.log("Project DTO:", dto);
 
 

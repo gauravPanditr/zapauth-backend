@@ -1,4 +1,3 @@
-
 import CreateAdminDto from "../dtos/createAdmin.dto";
 import LoginAdminDto from "../dtos/loginAdmin.dto";
 import NotFoundError from "../errors/notfound.error";

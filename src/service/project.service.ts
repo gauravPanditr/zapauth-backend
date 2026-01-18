@@ -2,7 +2,6 @@ import type { Project } from "@prisma/client";
 import { CreateProjectDTO } from "../dtos/createProjectdto";
 import ProjectRespository from "../repositories/project.repository";
 import jwt from "jsonwebtoken";
-
 import serverConfig from "../config"
 class ProjectService{
     private projectrepository:ProjectRespository;
@@ -31,11 +30,40 @@ async createProject(dto: CreateProjectDTO, adminId: string): Promise<Project> {
 }
  
 
+async updateProjectKey(projectId: string, adminId: string): Promise<Project> {
+  
+  const project = await this.projectrepository.getProjectById(projectId);
+
+  if (!project) {
+    throw new Error("Project not found");
+  }
+
+  if (project.ownerId !== adminId) {
+    throw new Error("Unauthorized to regenerate project key");
+  }
+
+  
+  const newProjectKey = jwt.sign(
+    { projectId: project.id, ownerId: adminId },
+    serverConfig.PROJECT_KEY_GENERATION_SECRET
+  );
+
+  
+  const updatedProject = await this.projectrepository.updateProjectKey(
+    project.id,
+    newProjectKey
+  );
+
+  return updatedProject;
+}
+
    
    async getAllProjectsByAdmin(adminId:string){
      return await this.projectrepository.getAllProjectsByAdmin(adminId);
    }
-
+   async getProjectById(projectId:string){
+     return await this.projectrepository.getProjectById(projectId);
+   }
  
    async deleteProjectById(id:string){
     const deleteproject=await this.projectrepository.deleteByProjectId(id);
