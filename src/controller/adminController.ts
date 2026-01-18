@@ -4,7 +4,8 @@ import AdminService from "../service/admin.service";
 import GenericError from "../errors/genericError";
 import { StatusCodes } from "http-status-codes";
 import { unknownErrorResponse } from "../utils/response.utils";
-import UnauthorisedError from "../errors/unauthorisedError";
+
+import { AuthenticatedAdminRequest } from "../types/RequestWithUser";
 
 const adminService = new AdminService(new AdminRepository());
 
@@ -44,23 +45,25 @@ const createAdmin = async (req: Request, res: Response) => {
       .json(unknownErrorResponse);
 }
 }
-const getMe = async (req: Request, res: Response) => {
-  const authHeader = req.headers.authorization;
-
-  if (!authHeader?.startsWith("Bearer ")) {
-    throw new UnauthorisedError("Access token missing");
-  }
-
-  const token = authHeader.split(" ")[1];
-  console.log(token);
-
-  if (!token) {
-    throw new UnauthorisedError("Access token missing");
-  }
-
-  const admin = await adminService.getAdminFromAccessToken(token);
-
-  return res.status(200).json(admin);
+const getMe = async (req:AuthenticatedAdminRequest, res: Response) => {
+      try {
+        const adminId = req.admin?.id;
+        if (!adminId) {
+            return res.status(StatusCodes.BAD_REQUEST).json({
+                message: 'Admin ID is required',
+                data: {},
+                err: {},
+                success: false
+            });
+        }
+        const response = await adminService.getAdminById(adminId);
+        
+        return res.json(response);
+    } catch (error) {
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(unknownErrorResponse);
+    }
+    
+   
 };
 
 const getById = async (req: Request, res: Response) => {

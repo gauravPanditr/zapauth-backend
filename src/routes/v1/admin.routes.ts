@@ -1,16 +1,17 @@
 import { Router } from "express";
 import adminController from "../../controller/adminController";
+import { authenticateAdmin } from "../../middleware/admin.auth";
 
 
 const adminrouter = Router();
 
-// Signup
+
 adminrouter.post("/signup",adminController.createAdmin);
 
-//login
+
 adminrouter.post("/login",adminController.loginAdmin);
 
-adminrouter.get("/me",adminController.getMe);
+adminrouter.get("/me",authenticateAdmin,adminController.getMe);
 
 adminrouter.get("/:id",adminController.getById);
 

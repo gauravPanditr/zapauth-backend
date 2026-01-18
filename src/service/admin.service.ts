@@ -53,7 +53,7 @@ class AdminService {
     const accessToken = generateAccessToken(payload);
     const refreshToken = generateRefreshToken(payload);
 
-     console.log(accessToken);
+     
      
     
     await this.adminRepository.saveRefreshToken(
