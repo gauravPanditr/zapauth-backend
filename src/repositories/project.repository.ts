@@ -24,6 +24,14 @@ class ProjectRespository{
     });
     return updatedProject;
   }
+  async updateAppName(id:string,newAppName: string){
+     const updatedAppName = await prisma.project.update({
+      where: { id },
+      data: { appName:newAppName },
+    });
+    return updatedAppName;
+  }
+
   async getProjectByKey(key:string){
      return prisma.project.findMany({
       where:{projectKey:key}

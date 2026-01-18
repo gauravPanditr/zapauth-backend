@@ -30,7 +30,7 @@ async createProject(dto: CreateProjectDTO, adminId: string): Promise<Project> {
 }
  
 
-async updateProjectKey(projectId: string):Promise<Project>{
+async updateProjectKey(projectId: string){
   const project = await this.projectrepository.getProjectById(projectId);
 
   if (!project) {
@@ -47,6 +47,17 @@ async updateProjectKey(projectId: string):Promise<Project>{
     newProjectKey
   );
 }
+async updateProjectAppName(projectId: string, newAppName: string) {
+  const project = await this.projectrepository.getProjectById(projectId);
+
+  if (!project) {
+    throw new Error("Project not found");
+  }
+
+  // Update appName in the repository
+  return await this.projectrepository.updateAppName(projectId, newAppName);
+}
+
 
 
    

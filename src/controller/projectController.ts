@@ -53,13 +53,8 @@ const createNewProjectKey = async (
       return res.status(400).json({
         message: "Project ID missing from request",
       });
-    }
-   console.log(projectId);
-   
-    
+    } 
     const updatedProject = await projectService.updateProjectKey(projectId);
-
-    // 3️⃣ Send response
     return res.status(200).json({
       success: true,
       message: "New project key generated successfully",
@@ -97,14 +92,44 @@ const getAllProjectsByAdmin=async(req:Request,res:Response)=>{
     }
 }
 
-// const updateProject=async(req:Request,res:Response)=>{
-//    try {
-//     const response=await projectService.(req.body);
-//       res.status(201).json(response);
-//    } catch (error) {
-//       res.status(500).json({ error: 'Internal Server Error' });
-//    }
-// }
+const updateAppName = async (req: AuthenticatedProjectRequest, res: Response) => {
+  try {
+    const projectId = req.project?.id;
+
+    if (!projectId) {
+      return res.status(400).json({
+        message: "Project ID missing from request",
+      });
+    }
+
+    const { appName } = req.body;
+
+    if (!appName) {
+      return res.status(400).json({
+        message: "appName is required in the request body",
+      });
+    }
+
+    
+    const updatedProject = await projectService.updateProjectAppName(projectId, appName);
+
+    return res.status(200).json({
+      success: true,
+      message: "App name updated successfully",
+      data: {
+        projectId: updatedProject.id,
+        appName: updatedProject.appName,
+      },
+    });
+  } catch (error: any) {
+    console.error("UpdateAppName Error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: error.message || "Internal server error",
+    });
+  }
+};
 
 const deleteProjectById=async(req:Request,res:Response)=>{
 try {
@@ -126,7 +151,7 @@ try {
 
 export default{
     createProject,
-    // updateProject,
+    updateAppName,
     deleteProjectById,
     getAllProjectsByAdmin,
     createNewProjectKey
