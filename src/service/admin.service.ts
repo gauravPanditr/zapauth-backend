@@ -102,42 +102,26 @@ class AdminService {
     }
     
 
-    async refreshTokens(refreshToken: string) {
-      
-    if (!refreshToken) throw new UnauthorisedError("Refresh token missing");
+async refreshAccessToken(refreshToken: string) {
+  if (!refreshToken) throw new UnauthorisedError("Refresh token missing");
 
-    // 1. Find admin with this refresh token
-     
-    const admin = await this.adminRepository.getAdminByRefreshToken(refreshToken);
-   
-    if (!admin) throw new UnauthorisedError("Invalid refresh token");
-
-    try {
-     
-      const payload = verify(refreshToken,serverConfig.REFRESH_TOKEN_SECRET) as JwtPayload;
-       
-       const { id, email, username } = payload;
-
-const cleanPayload = { id, email, username }; 
-      // 3. Generate new tokens
-      const newAccessToken = generateAccessToken(cleanPayload);
-      console.log(newAccessToken);
-      
-      const newRefreshToken = generateRefreshToken(cleanPayload);
-      console.log(newRefreshToken);
-      
-      // 4. Save new refresh token in DB
-      await this.adminRepository.saveRefreshToken(
-        newRefreshToken,
-        admin.id,
-        new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-      );
-
-      return { accessToken: newAccessToken, refreshToken: newRefreshToken };
-    } catch (err) {
-      throw new UnauthorisedError("Invalid refresh token");
-    }
+  // 1. Verify refresh token (no need to generate a new one)
+  let payload: JwtPayload;
+  try {
+    payload = verify(refreshToken, serverConfig.REFRESH_TOKEN_SECRET) as JwtPayload;
+  } catch (err) {
+    throw new UnauthorisedError("Invalid refresh token");
   }
+
+  // 2. Extract admin info
+  const { id, email, username } = payload;
+  const cleanPayload = { id, email, username };
+
+  // 3. Generate only a new access token
+  const newAccessToken = generateAccessToken(cleanPayload);
+
+  return { accessToken: newAccessToken };
+}
 }
 
 

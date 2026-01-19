@@ -95,17 +95,32 @@ const getById = async (req: Request, res: Response) => {
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(unknownErrorResponse);
     }
 }
- const refreshToken = async (req: Request, res: Response) => {
-  const { refreshToken } = req.body;
+  const refreshToken = async (req: Request, res: Response) => {
+  
+  const token =
+      req.headers.authorization?.replace("Bearer ", "") || req.cookies["admin-refresh-token"];
 
- // or from cookie
+  if (!token) {
+   res.status(401).json({ message: "Refresh token missing" });
+  }
+
   try {
-    const tokens = await adminService.refreshTokens(refreshToken);
-    res.json(tokens);
+    // Call service method to generate only new access token
+    const { accessToken } = await adminService.refreshAccessToken(token);
+
+    // Store access token in a secure HttpOnly cookie
+    res.cookie("admin-access-token", accessToken, {
+      httpOnly: true,                   
+      sameSite: "lax",                 
+maxAge: 15 * 60 * 1000,          
+    });
+
+   
+    res.status(200).json({ message: "Access token refreshed successfully" });
   } catch (err) {
     res.status(401).json({ message: "Unauthorized" });
   }
-}
+};
 export default {
     createAdmin,
     loginAdmin,
