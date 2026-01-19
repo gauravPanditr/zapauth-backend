@@ -18,6 +18,18 @@ class AdminRespository {
     })
     return newAdmin;
   }
+ async deleteTokens(adminId: string){
+    return prisma.admins.update({
+      where: { id: adminId },
+      data: {
+       refreshTokens: {
+        deleteMany: {},
+      },
+        
+      },
+    });
+  }
+
   async getAdminByUsername(username: string): Promise<Admins | null> {
     const user = await prisma.admins.findFirst({ where: { username: username } });
     return user;

@@ -122,6 +122,16 @@ async refreshAccessToken(refreshToken: string) {
 
   return { accessToken: newAccessToken };
 }
+async deleteLoginSession(adminId: string) {
+  try {
+    const admin = await this.adminRepository.deleteTokens(adminId);
+    if (!admin) {
+      throw new UnauthorisedError("Admin not found");
+    }
+  } catch (err) {
+    throw err; // or wrap in custom error
+  }
+}
 }
 
 

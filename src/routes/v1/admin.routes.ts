@@ -15,7 +15,7 @@ adminrouter.get("/me",authenticateAdmin,adminController.getMe);
 
 adminrouter.get("/:id",adminController.getById);
 
-
+adminrouter.post('/logout',authenticateAdmin,adminController.deleteLoginSession);
 adminrouter.post('/refresh',adminController.refreshToken)
 
 export default adminrouter;

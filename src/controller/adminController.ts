@@ -121,10 +121,31 @@ maxAge: 15 * 60 * 1000,
     res.status(401).json({ message: "Unauthorized" });
   }
 };
+const deleteLoginSession = 
+  async (req: AuthenticatedAdminRequest, res: Response) => {
+    const adminId = req.admin?.id;
+
+    if (!adminId) {
+    return   res.status(401).json({ message: "Unauthorized" });
+    } 
+
+  
+    await adminService.deleteLoginSession(adminId);
+
+   return  res
+      .status(200)
+      .clearCookie("admin-access-token")
+      .clearCookie("admin-refresh-token")
+      .json({
+        message: "Admin login session deleted successfully",
+      });
+  }
+
 export default {
     createAdmin,
     loginAdmin,
     getById,
     refreshToken,
-    getMe
+    getMe,
+    deleteLoginSession
 }
