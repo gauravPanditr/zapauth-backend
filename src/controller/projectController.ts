@@ -72,19 +72,20 @@ const createNewProjectKey = async (
     });
   }
 };
-const getAllProjectsByAdmin=async(req:Request,res:Response)=>{
+const getAllProjectsByAdmin=async(req:AuthenticatedAdminRequest,res:Response)=>{
     try {
-        const { id } = req.params;
-           if (!id) {
+         const adminId = req.admin?.id;
+
+           if (!adminId) {
                return res.status(StatusCodes.BAD_REQUEST).json({
-                   message: 'Project ID is required',
+                   message: 'Admin ID is required',
                    data: {},
                    err: {},
                    success: false
                });
            }
        
-      const response=await projectService.getAllProjectsByAdmin(id);
+      const response=await projectService.getAllProjectsByAdmin(adminId);
       return  res.status(201).json(response);
 
     } catch (error) {
