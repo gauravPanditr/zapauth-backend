@@ -5,17 +5,15 @@ import { prisma } from "../config/dbConfig";
 import { User } from "@prisma/client";
 class UserRepository{
 
-async createUser(dto:CreateUserDTO,projectId: string) :Promise<User>{
+async createUser(dto:CreateUserDTO) :Promise<User>{
     
      return prisma.user.create({
       data: {
-        projectId,
+        projectId:dto.projectId,
         username: dto.username,
         email: dto.email,
         password: dto.password, 
-        isVerified: dto.isVerified ?? false,
-        token: dto.token ?? null,
-        tokenExpiry: dto.tokenExpiry ?? null,
+        
       },
     });
 

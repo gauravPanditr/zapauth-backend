@@ -1,6 +1,5 @@
 import {
-  IsBoolean,
-  IsDate,
+  
   IsEmail,
   IsNotEmpty,
   IsOptional,
@@ -25,33 +24,22 @@ export default class CreateUserDTO {
   @MinLength(6)
   password: string;
 
-  @IsOptional()
-  @IsBoolean()
-  isVerified?: boolean; // optional
-
-  @IsOptional()
   @IsString()
-  token?: string; // <-- added ?
-
-  @IsOptional()
-  @IsDate()
-  tokenExpiry?: Date; // <-- added ?
+  @IsNotEmpty()
+  projectId:string
 
   constructor(
     
     email: string,
     password: string,
     username: string,
-    isVerified?: boolean,
-    token?: string,
-    tokenExpiry?: Date
+    projectId:string
   ) {
     
     this.email = email;
     this.password = password;
     this.username = username;
-    if (isVerified !== undefined) this.isVerified = isVerified;
-    if (token) this.token = token;
-    if (tokenExpiry) this.tokenExpiry = tokenExpiry;
+    this.projectId=projectId
+  
   }
 }

@@ -1,9 +1,8 @@
 import CreateUserDTO from "../dtos/createUser.dto";
-import ProjectRespository from "../repositories/project.repository";
+
 import UserRepository from "../repositories/user.repository";
 import bcrypt from "bcryptjs"
 
-const projectRespository=new ProjectRespository();
 
 class UserService{
   private userRepository: UserRepository
@@ -13,23 +12,10 @@ class UserService{
     
     
    
-  async createUser(dto: CreateUserDTO, projectId: string, projectKey: string){
-    
-     const project = await projectRespository.getProjectById(projectId);
-
-    if (!project) {
-      throw new Error("Project not found");
-    }
-
-    if (project.projectKey!== projectKey) {
-      throw new Error("Invalid project key");
-    }
-
-    // Hash password
+  async createUser(dto: CreateUserDTO){
     dto.password = bcrypt.hashSync(dto.password, 10);
 
-    // Create user
-    return this.userRepository.createUser(dto, projectId);
+    return this.userRepository.createUser(dto);
   }
  async findByEmail(
     email: string,
