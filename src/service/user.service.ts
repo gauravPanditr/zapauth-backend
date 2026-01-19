@@ -41,6 +41,8 @@ async createUser(dto: CreateUserDTO){
     if (!user) return; // security
 
     const token = generateOTP();
+    console.log(token);
+    
     const expiry = new Date(Date.now() + 15 * 60 * 1000);
 
     await this.userRepository.update(user.id, {
