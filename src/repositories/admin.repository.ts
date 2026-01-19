@@ -2,6 +2,7 @@ import CreateAdminDto from "../dtos/createAdmin.dto";
 
 import { prisma } from "../config/dbConfig";
 import type { Admins,RefreshToken } from "@prisma/client";
+import UpdateAdminDto from "../dtos/updateAdmin.dto";
 
 class AdminRespository {
 
@@ -30,7 +31,12 @@ class AdminRespository {
     const admin = await prisma.admins.findUnique({ where: { id } });
     return admin;
   }
-  
+  async updateAdmin(adminId: string, data: UpdateAdminDto) {
+  return prisma.admins.update({
+    where: { id: adminId },
+    data,
+  });
+}
 
  async saveRefreshToken(
     token: string,

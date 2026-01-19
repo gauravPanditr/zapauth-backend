@@ -19,13 +19,21 @@ const createAdmin = async (req: Request, res: Response) => {
 };
  const loginAdmin = async (req: Request, res: Response) => {
   try {
-    const tokens = await adminService.loginAdmin(req.body);
+    const { accessToken, refreshToken } =
+      await adminService.loginAdmin(req.body);
 
-    return res.status(StatusCodes.CREATED).json({
+   
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    });
+
+  
+    return res.status(StatusCodes.OK).json({
       message: "Successfully logged in the admin",
       data: {
-        accessToken: tokens.accessToken,
-        refreshToken: tokens.refreshToken,
+        accessToken,
       },
       err: {},
       success: true,
@@ -40,11 +48,14 @@ const createAdmin = async (req: Request, res: Response) => {
       });
     }
 
-    return res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json(unknownErrorResponse);
-}
-}
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      message: "Something went wrong",
+      data: {},
+      err: error,
+      success: false,
+    });
+  }
+};
 const getMe = async (req:AuthenticatedAdminRequest, res: Response) => {
       try {
         const adminId = req.admin?.id;
