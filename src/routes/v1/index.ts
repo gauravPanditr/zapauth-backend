@@ -9,6 +9,6 @@ const v1Router = express.Router();
 
 v1Router.use('/admin', adminrouter);
 v1Router.use('/project',authenticateAdmin,projectRouter);
-v1Router.use('/user',validateProject,userRouter);
+v1Router.use('/auth',validateProject,userRouter);
 
 export default v1Router;
