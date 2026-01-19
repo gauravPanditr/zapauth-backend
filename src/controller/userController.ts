@@ -85,9 +85,53 @@ const projectId = req.project?.id;
     .status(201)
     .json({ message: "Login successful", session });
 };
+const forgotPassword = async (
+  req: AuthenticatedProjectRequest,
+  res: Response
+) => {
+  const projectId = req.project?.id;
+    if (!projectId) {
+    return res.status(401).json({
+      message: "Project not authenticated",
+    });
+  }
+  const { email, baseUrl } = req.body;
+
+  if (!email || !baseUrl) {
+    return res.status(400).json({ message: "Email & baseUrl required" });
+  }
+
+  await userService.forgotPassword({ email, projectId, baseUrl });
+
+ return  res.json({ message: "If email exists, reset link sent" });
+};
+
+const resetPassword = async (
+  req: AuthenticatedProjectRequest,
+  res: Response
+) => {
+  const projectId = req.project?.id;
+    if (!projectId) {
+    return res.status(401).json({
+      message: "Project not authenticated",
+    });
+  }
+  const { token, newPassword } = req.body;
+
+  if (!token || !newPassword) {
+   return   res.status(400).json({ message: "Token & password required" });
+  }
+
+  await userService.resetPassword({ token, newPassword, projectId });
+
+ return res.json({ message: "Password reset successful" });
+};
+
 
 
 export default{
     createUser,
-    login
+    login,
+    forgotPassword,
+    resetPassword
 }
