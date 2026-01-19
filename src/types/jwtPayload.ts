@@ -7,7 +7,7 @@ export interface JwtPayload {
 
 // User JWT
 export interface JwtPayloadUser {
-  id: string;
+  userId: string;
   email: string;
   projectId?: string;
 }

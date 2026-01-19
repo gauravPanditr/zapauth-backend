@@ -6,7 +6,7 @@ const router = Router();
 
 // User signup under project
 router.post("/signup", userController.createUser);
-
+router.post("/login",userController.login)
 // User login under project
 // router.post("/login", login);
 

@@ -17,15 +17,19 @@ class UserService{
 
     return this.userRepository.createUser(dto);
   }
- async findByEmail(
-    email: string,
-    projectId: string
-  ){
-     const user = await this.userRepository.findByEmail(email, projectId);
-if (!user) throw new Error("Invalid credentials");
- return user;
+  async validateUser(email: string, password: string) {
+    const user = await this.userRepository.findByEmail(email);
+    if (!user) return null;
 
+    const valid = await bcrypt.compare(password, user.password);
+    if (!valid) return null;
+
+    return user;
   }
+
+
+
+  
 
   async getUserById(id:string){
     const userId=await this.userRepository.findUserById(id);

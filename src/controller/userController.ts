@@ -3,9 +3,13 @@ import UserRepository from "../repositories/user.repository";
 import UserService from "../service/user.service";
 import CreateUserDTO from "../dtos/createUser.dto";
 import { AuthenticatedProjectRequest } from "../types/authenticatedRequest";
+import { parseUserAgent } from "../utils/user-agent-parser";
+import { SessionService } from "../service/session.service";
+import SessionRepository from "../repositories/session.repository";
+import { CreateSessionDTO } from "../dtos/sessionUser.dto";
 
 const userService = new UserService(new UserRepository());
-
+const sessionService=new SessionService(new SessionRepository())
 const createUser = async (
   req: AuthenticatedProjectRequest,
   res: Response
@@ -30,8 +34,60 @@ return  res.status(201).json({
     data: user,
   });
 };
+ const login =async (req: AuthenticatedProjectRequest, res: Response) => {
+const projectId = req.project?.id;
+
+  if (!projectId) {
+    return res.status(401).json({
+      message: "Project not authenticated",
+    });
+  }
+
+  const { email, password } = req.body;
+  if (!email || !password || !projectId) {
+    return res.status(400).json({ message: "Missing required fields" });
+  }
+
+  const user = await userService.validateUser(email, password);
+  if (!user) return res.status(401).json({ message: "Invalid credentials" });
+
+  const userAgentHeader = req.headers["user-agent"] || "";
+  const details = parseUserAgent(userAgentHeader);
+
+ const sessionDTO = new CreateSessionDTO({
+  userId: user.id,
+  projectId,
+  userAgent: details.userAgent,
+  deviceType: details.deviceType,
+  os: details.os,
+  ipAddress: req.ip || "",
+  accessToken: "",              
+  refreshToken: "",             
+  accessTokenExpiry: new Date(),   
+  refreshTokenExpiry: new Date(),   
+});
+
+  const { session, accessToken, refreshToken } =
+    await sessionService.createLoginSession(sessionDTO);
+
+  // Set cookies
+  return res
+    .cookie("user-access-token", accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 15 * 60 * 1000,
+    })
+    .cookie("user-refresh-token", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    })
+    .status(201)
+    .json({ message: "Login successful", session });
+};
 
 
 export default{
-    createUser
+    createUser,
+    login
 }

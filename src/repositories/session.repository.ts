@@ -3,34 +3,28 @@ import { CreateSessionDTO } from "../dtos/sessionUser.dto";
 
 
 class SessionRepository {
-  create(dto: CreateSessionDTO) {
-    return prisma.session.create({
-      data: {
-        userId: dto.userId,
-        projectId: dto.projectId,
-        accessToken: dto.accessToken,
-        accessTokenExpiry: dto.accessTokenExpiry,
-        refreshToken: dto.refreshToken,
-        refreshTokenExpiry: dto.refreshTokenExpiry,
-        deviceType: "DESKTOP",
-        userAgent: dto.userAgent,
-        
-        os: dto.os,
-      },
-    });
+
+  
+   async createSession(data: CreateSessionDTO) {
+    return prisma.session.create({ data });
   }
 
-  findByRefreshToken(refreshToken: string) {
+ async findByRefreshToken(refreshToken: string) {
     return prisma.session.findFirst({
       where: { refreshToken },
     });
   }
 
-  deleteById(id: string) {
+ async deleteById(id: string) {
     return prisma.session.delete({ where: { id } });
   }
+   async findByUserAndDevice(userId: string, userAgent: string) {
+    return prisma.session.findFirst({
+      where: { userId, userAgent },
+    });
+  }
 
-  deleteExpired(userId: string) {
+ async deleteExpired(userId: string) {
     return prisma.session.deleteMany({
       where: {
         userId,

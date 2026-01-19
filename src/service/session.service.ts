@@ -1,21 +1,52 @@
-import SessionRepository from "../repositories/session.repository";
+// services/session.service.ts
+import  SessionRepository  from "../repositories/session.repository";
 import { CreateSessionDTO } from "../dtos/sessionUser.dto";
+import { generateAccessToken, generateRefreshToken } from "../utils/auth.user.utils";
 
-class SessionService {
-  constructor(private repo: SessionRepository) {}
 
-  async create(dto: CreateSessionDTO) {
-    await this.repo.deleteExpired(dto.userId);
-    return this.repo.create(dto);
-  }
+export class SessionService {
+ 
+    private sessionRepository: SessionRepository
+    constructor(sessionRepository: SessionRepository) {
+        this.sessionRepository = sessionRepository;
+    }
 
-  async getByRefreshToken(token: string) {
-    return this.repo.findByRefreshToken(token);
-  }
+  async createLoginSession(sessionDTO: CreateSessionDTO) {
+    // Check for existing session
+    const existing = await this.sessionRepository.findByUserAndDevice(
+      sessionDTO.userId,
+      sessionDTO.userAgent
+    );
+    if (existing) throw new Error("Session already exists for this device");
 
-  async invalidate(sessionId: string) {
-    return this.repo.deleteById(sessionId);
+    // Generate tokens if not present
+    if (!sessionDTO.accessToken) {
+      sessionDTO.accessToken = generateAccessToken({
+        userId: sessionDTO.userId,
+        projectId: sessionDTO.projectId,
+        email: "", 
+      });
+    }
+
+    if (!sessionDTO.refreshToken) {
+      sessionDTO.refreshToken = generateRefreshToken({
+        userId: sessionDTO.userId,
+        projectId: sessionDTO.projectId,
+        email: "", 
+      });
+    }
+
+    // Set expiries if missing
+    if (!sessionDTO.accessTokenExpiry)
+      sessionDTO.accessTokenExpiry = new Date(Date.now() + 15 * 60 * 1000);
+    if (!sessionDTO.refreshTokenExpiry)
+      sessionDTO.refreshTokenExpiry = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+
+    const session = await this.sessionRepository.createSession(sessionDTO);
+    return {
+      session,
+      accessToken: sessionDTO.accessToken,
+      refreshToken: sessionDTO.refreshToken,
+    };
   }
 }
-
-export default SessionService;

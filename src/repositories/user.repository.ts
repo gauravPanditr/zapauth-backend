@@ -18,16 +18,8 @@ async createUser(dto:CreateUserDTO) :Promise<User>{
     });
 
 }
- async findByEmail(
-    email: string,
-    projectId: string
-  ): Promise<User | null> {
-    return prisma.user.findFirst({
-      where: {
-        email,
-        projectId,
-      },
-    });
+  async findByEmail(email: string) {
+    return prisma.user.findUnique({ where: { email } });
   }
 
 async findUserByEamiId(userEmail:string){
