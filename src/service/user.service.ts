@@ -52,7 +52,7 @@ async createUser(dto: CreateUserDTO){
 
     const resetLink = `${data.baseUrl}?token=${token}`;
 
-    const emailService = new EmailService(user.project);
+    const emailService = new EmailService();
     await emailService.sendResetPasswordEmail(user.email, resetLink);
   }
 

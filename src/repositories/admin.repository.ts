@@ -1,5 +1,4 @@
 import CreateAdminDto from "../dtos/createAdmin.dto";
-
 import { prisma } from "../config/dbConfig";
 import type { Admins,RefreshToken } from "@prisma/client";
 import UpdateAdminDto from "../dtos/updateAdmin.dto";
