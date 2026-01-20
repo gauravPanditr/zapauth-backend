@@ -23,14 +23,14 @@ const createAdmin = async (req: Request, res: Response) => {
     const { accessToken, refreshToken } =
       await adminService.loginAdmin(req.body);
    res.cookie("admin-access-token", accessToken, {
-  httpOnly: true,
-  sameSite: "lax",
+  
+  
   maxAge: 15 * 60 * 1000, // 15 min
 });
 
 res.cookie("admin-refresh-token", refreshToken, {
-  httpOnly: true,
-  sameSite: "lax",
+  
+  
   maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
 });
   
@@ -110,8 +110,7 @@ export const refreshToken = async (req: Request, res: Response) => {
     const { accessToken } = await adminService.refreshAccessToken(token);
 
     res.cookie("admin-access-token", accessToken, {
-      httpOnly: true,
-      sameSite: "lax",
+      
       maxAge: 15 * 60 * 1000,
     });
 
