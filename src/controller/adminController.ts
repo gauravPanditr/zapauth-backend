@@ -22,17 +22,20 @@ const createAdmin = async (req: Request, res: Response) => {
   try {
     const { accessToken, refreshToken } =
       await adminService.loginAdmin(req.body);
-   res.cookie("admin-access-token", accessToken, {
-  
-  
-  maxAge: 15 * 60 * 1000, // 15 min
+ res.cookie("admin-access-token", accessToken, {
+  httpOnly: true,        
+  secure: true,          
+  sameSite: "none",     
+  maxAge: 15 * 60 * 1000 // 15 min
 });
 
 res.cookie("admin-refresh-token", refreshToken, {
-  
-  
-  maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+  httpOnly: true,
+  secure: true,
+  sameSite: "none",
+  maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
 });
+
   
     return res.status(StatusCodes.OK).json({
       message: "Successfully logged in the admin",
@@ -110,8 +113,11 @@ export const refreshToken = async (req: Request, res: Response) => {
     const { accessToken } = await adminService.refreshAccessToken(token);
 
     res.cookie("admin-access-token", accessToken, {
-      
-      maxAge: 15 * 60 * 1000,
+       httpOnly: true,        
+  secure: true,          
+  sameSite: "none",     
+  maxAge: 15 * 60 * 1000 
+    
     });
 
     return res.status(200).json({
@@ -134,13 +140,11 @@ const deleteLoginSession =
   
     await adminService.deleteLoginSession(adminId);
 
-   return  res
-      .status(200)
-      .clearCookie("admin-access-token")
-      .clearCookie("admin-refresh-token")
-      .json({
-        message: "Admin login session deleted successfully",
-      });
+  return res
+  .status(200)
+  .clearCookie("admin-access-token", { sameSite: "none", secure: true })
+  .clearCookie("admin-refresh-token", { sameSite: "none", secure: true })
+  .json({ message: "Admin login session deleted successfully" });
   }
 
 export default {
