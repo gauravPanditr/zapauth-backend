@@ -55,6 +55,8 @@ export class SessionService {
   async findByAccessToken(accessToken:string){
       return await this.sessionRepository.findByAccessToken(accessToken);
   }
-
-
+  async findBySessionId(sessionId:string){
+     return await this.sessionRepository.findBySesssionId(sessionId);
+  }
+ 
 }

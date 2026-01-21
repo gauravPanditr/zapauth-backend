@@ -7,6 +7,8 @@ import { parseUserAgent } from "../utils/user-agent-parser";
 import { SessionService } from "../service/session.service";
 import SessionRepository from "../repositories/session.repository";
 import { CreateSessionDTO } from "../dtos/sessionUser.dto";
+import { AuthenticatedUserRequest } from "../types/requestwithUser";
+import { StatusCodes } from "http-status-codes";
 
 const userService = new UserService(new UserRepository());
 const sessionService=new SessionService(new SessionRepository())
@@ -86,7 +88,25 @@ const projectId = req.project?.id;
     .json({ message: "Login successful", session });
 };
 
+ const getCurrentUser=async(req:AuthenticatedUserRequest,res:Response)=>{
+      const userId=req.user?.userId;
+       const sessionId=req.session?.id;
 
+        if(!userId || !sessionId){
+            return res.status(401).json({ message: "Unauthorized" });
+        }
+
+       const session=await sessionService.findBySessionId(sessionId);
+       const user=await userService.findById(userId);
+
+     return  res.status(StatusCodes.OK).json({
+         session,
+         user
+       })
+
+
+
+ }
 
 
 
@@ -138,5 +158,6 @@ export default{
     createUser,
     login,
     forgotPassword,
-    resetPassword
+    resetPassword,
+    getCurrentUser
 }

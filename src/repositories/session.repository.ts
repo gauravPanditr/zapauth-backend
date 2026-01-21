@@ -8,6 +8,11 @@ class SessionRepository {
    async createSession(data: CreateSessionDTO) {
     return prisma.session.create({ data });
   }
+  async findBySesssionId(sessionId:string){
+     return await prisma.session.findUnique({
+       where:{id:sessionId}
+     })
+  }
 
  async findByRefreshToken(refreshToken: string) {
     return prisma.session.findFirst({
@@ -28,6 +33,7 @@ class SessionRepository {
       where: { userId, userAgent },
     });
   }
+
 
  async deleteExpired(userId: string) {
     return prisma.session.deleteMany({
