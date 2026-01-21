@@ -6,7 +6,8 @@ export  interface JwtDecodedAdmin {
   
 }
 export interface JwtDecodedUser{
-    id:string;
+    userId:string;
     email:string;
-    projectId:string
+    username:string
+    projectId?:string
 }

@@ -28,6 +28,9 @@ async createUser(dto: CreateUserDTO){
     return user;
   }
 
+  async findById(id:string){
+     return this.userRepository.findUserById(id);
+  }
  async forgotPassword(data: {
     email: string;
     projectId: string;

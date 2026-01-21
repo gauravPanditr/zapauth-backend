@@ -14,6 +14,11 @@ class SessionRepository {
       where: { refreshToken },
     });
   }
+  async findByAccessToken(accessToken:string){
+     return prisma.session.findFirst({
+       where:{accessToken}
+     })
+  }
 
  async deleteById(id: string) {
     return prisma.session.delete({ where: { id } });

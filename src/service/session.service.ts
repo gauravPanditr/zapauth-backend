@@ -25,6 +25,7 @@ export class SessionService {
         userId: sessionDTO.userId,
         projectId: sessionDTO.projectId,
         email: "", 
+        username:""
       });
     }
 
@@ -33,6 +34,7 @@ export class SessionService {
         userId: sessionDTO.userId,
         projectId: sessionDTO.projectId,
         email: "", 
+        username:""
       });
     }
 
@@ -49,4 +51,10 @@ export class SessionService {
       refreshToken: sessionDTO.refreshToken,
     };
   }
+
+  async findByAccessToken(accessToken:string){
+      return await this.sessionRepository.findByAccessToken(accessToken);
+  }
+
+
 }

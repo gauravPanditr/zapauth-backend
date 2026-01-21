@@ -10,4 +10,5 @@ export interface JwtPayloadUser {
   userId: string;
   email: string;
   projectId?: string;
+  username:string
 }

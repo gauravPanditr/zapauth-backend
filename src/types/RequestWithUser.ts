@@ -1,7 +1,8 @@
-import { Request } from "express";
+import {Request} from "express";
 
-import {JwtDecodedAdmin} from "./JwtDecodedUser";
+import {JwtDecodedUser} from "./JwtDecodedUser";
 
-export interface AuthenticatedAdminRequest extends Request {
-    admin?: JwtDecodedAdmin;
+export interface AuthenticatedUserRequest extends Request {
+    session: { id: any; token: any; };
+    user?: JwtDecodedUser;
 }

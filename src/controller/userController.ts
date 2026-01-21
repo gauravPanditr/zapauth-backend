@@ -74,17 +74,22 @@ const projectId = req.project?.id;
   return res
     .cookie("user-access-token", accessToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      
       maxAge: 15 * 60 * 1000,
     })
     .cookie("user-refresh-token", refreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+     
       maxAge: 7 * 24 * 60 * 60 * 1000,
     })
     .status(201)
     .json({ message: "Login successful", session });
 };
+
+
+
+
+
 const forgotPassword = async (
   req: AuthenticatedProjectRequest,
   res: Response

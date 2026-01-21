@@ -5,7 +5,7 @@ import GenericError from "../errors/genericError";
 import { StatusCodes } from "http-status-codes";
 import { unknownErrorResponse } from "../utils/response.utils";
 
-import { AuthenticatedAdminRequest } from "../types/RequestWithUser";
+import { AuthenticatedAdminRequest } from "../types/requestwithAdmin";
 
 
 const adminService = new AdminService(new AdminRepository());

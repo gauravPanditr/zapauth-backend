@@ -1,5 +1,5 @@
 import { Response, NextFunction } from "express";
-import { AuthenticatedAdminRequest } from "../types/RequestWithUser";
+import { AuthenticatedAdminRequest } from "../types/requestwithAdmin";
 import { verifyAccessToken } from "../utils/auth.admin.utils";
 import AdminService from "../service/admin.service";
 import AdminRepository from "../repositories/admin.repository";

@@ -4,7 +4,7 @@ import ProjectService from "../service/project.service";
 import { Request, Response } from "express";
 import { CreateProjectDTO } from "../dtos/createProjectdto";
 import UnauthorisedError from "../errors/unauthorisedError";
-import { AuthenticatedAdminRequest } from "../types/RequestWithUser";
+import { AuthenticatedAdminRequest } from "../types/requestwithAdmin";
 import { AuthenticatedProjectRequest } from "../types/authenticatedRequest";
 
 const projectService = new ProjectService(new ProjectRespository());
