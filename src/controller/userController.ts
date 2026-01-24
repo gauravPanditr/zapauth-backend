@@ -10,6 +10,7 @@ import { CreateSessionDTO } from "../dtos/sessionUser.dto";
 import { AuthenticatedUserRequest } from "../types/requestwithUser";
 import { StatusCodes } from "http-status-codes";
 
+
 const userService = new UserService(new UserRepository());
 const sessionService=new SessionService(new SessionRepository())
 const createUser = async (
@@ -95,18 +96,44 @@ const projectId = req.project?.id;
         if(!userId || !sessionId){
             return res.status(401).json({ message: "Unauthorized" });
         }
-
+        console.log(sessionId);
+        
        const session=await sessionService.findBySessionId(sessionId);
-       const user=await userService.findById(userId);
 
+       const user=await userService.findById(userId);
+        console.log(user);
      return  res.status(StatusCodes.OK).json({
          session,
          user
        })
 
-
-
  }
+ 
+// export const refreshToken = async (req: Request, res: Response) => {
+//   const token = req.cookies["user-refresh-token"];
+
+//   if (!token) {
+//     return res.status(401).json({ message: "Refresh token missing" });
+//   }
+
+//   try {
+//     const { accessToken } = await sessionService.refreshAccessToken(token);
+
+//     res.cookie("user-access-token", accessToken, {
+//        httpOnly: true,        
+//   secure: true,          
+//   sameSite: "none",     
+//   maxAge: 15 * 60 * 1000 
+    
+//     });
+
+//     return res.status(200).json({
+//       message: "Access token refreshed successfully",
+//     });
+//   } catch {
+//     return res.status(401).json({ message: "Unauthorized" });
+//   }
+// };
 
 
 
@@ -159,5 +186,6 @@ export default{
     login,
     forgotPassword,
     resetPassword,
-    getCurrentUser
+    getCurrentUser,
+    
 }

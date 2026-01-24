@@ -10,7 +10,8 @@ router.post("/signup", userController.createUser);
 router.post("/login",userController.login)
 router.post("/forgot-password", userController.forgotPassword);
 router.post("/reset-password",  userController.resetPassword);
-router.post("/me",authenticateUser,userController.getCurrentUser);
+router.get("/me",authenticateUser,userController.getCurrentUser);
+
 // User login under project
 // router.post("/login", login);
 

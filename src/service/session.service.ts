@@ -2,6 +2,11 @@
 import  SessionRepository  from "../repositories/session.repository";
 import { CreateSessionDTO } from "../dtos/sessionUser.dto";
 import { generateAccessToken, generateRefreshToken } from "../utils/auth.user.utils";
+import { verify } from "jsonwebtoken";
+import serverConfig from "../config";
+import UnauthorisedError from "../errors/unauthorisedError";
+import { JwtPayloadUser } from "../types/jwtPayload";
+
 
 
 export class SessionService {
@@ -58,5 +63,26 @@ export class SessionService {
   async findBySessionId(sessionId:string){
      return await this.sessionRepository.findBySesssionId(sessionId);
   }
+   async refreshAccessToken(refreshToken: string) {
+  if (!refreshToken) throw new UnauthorisedError("Refresh token missing");
+
+  // 1. Verify refresh token (no need to generate a new one)
+  let payload: JwtPayloadUser;
+  try {
+    payload = verify(refreshToken, serverConfig.REFRESH_TOKEN_SECRET) as JwtPayloadUser;
+  } catch (err) {
+    throw new UnauthorisedError("Invalid refresh token");
+  }
+
+  // 2. Extract admin info
+  const { userId, email, username } = payload;
+  const cleanPayload = { userId, email, username };
+
+  // 3. Generate only a new access token
+  const newAccessToken = generateAccessToken(cleanPayload);
+
+  return { accessToken: newAccessToken };
+}
+
  
 }

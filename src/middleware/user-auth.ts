@@ -43,10 +43,10 @@ export const authenticateUser = async (
       return;
     }
 
-    if (session.accessTokenExpiry < new Date()) {
-      res.status(401).json({ message: "Access token expired" });
-      return;
-    }
+    // if (session.accessTokenExpiry < new Date()) {
+    //   res.status(401).json({ message: "Access token expired" });
+    //   return;
+    // }
 
     // 4️ Fetch user
     const user = await userService.findById(payload.userId);
