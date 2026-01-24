@@ -109,31 +109,39 @@ const projectId = req.project?.id;
 
  }
  
-// export const refreshToken = async (req: Request, res: Response) => {
-//   const token = req.cookies["user-refresh-token"];
+export const refreshToken = async (req: AuthenticatedProjectRequest, res: Response) => {
+  const projectId = req.project?.id;
 
-//   if (!token) {
-//     return res.status(401).json({ message: "Refresh token missing" });
-//   }
+  if (!projectId) {
+    return res.status(401).json({
+      message: "Project not authenticated",
+    });
+  }
 
-//   try {
-//     const { accessToken } = await sessionService.refreshAccessToken(token);
+  const token = req.cookies["user-refresh-token"];
 
-//     res.cookie("user-access-token", accessToken, {
-//        httpOnly: true,        
-//   secure: true,          
-//   sameSite: "none",     
-//   maxAge: 15 * 60 * 1000 
+  if (!token) {
+    return res.status(401).json({ message: "Refresh token missing" });
+  }
+
+  try {
+    const { accessToken } = await sessionService.refreshAccessToken(token);
+
+    res.cookie("user-access-token", accessToken, {
+       httpOnly: true,        
+  secure: true,          
+  sameSite: "none",     
+  maxAge: 15 * 60 * 1000 
     
-//     });
+    });
 
-//     return res.status(200).json({
-//       message: "Access token refreshed successfully",
-//     });
-//   } catch {
-//     return res.status(401).json({ message: "Unauthorized" });
-//   }
-// };
+    return res.status(200).json({
+      message: "Access token refreshed successfully",
+    });
+  } catch {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+};
 
 
 
@@ -187,5 +195,6 @@ export default{
     forgotPassword,
     resetPassword,
     getCurrentUser,
+    refreshToken
     
 }
