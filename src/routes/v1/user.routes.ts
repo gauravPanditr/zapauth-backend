@@ -12,6 +12,7 @@ router.post("/forgot-password", userController.forgotPassword);
 router.post("/reset-password",  userController.resetPassword);
 router.get("/me",authenticateUser,userController.getCurrentUser);
 router.post('/refresh',userController.refreshToken)
+router.delete('/session/delete',authenticateUser,userController.deleteCurrentLogin);
 // User login under project
 // router.post("/login", login);
 

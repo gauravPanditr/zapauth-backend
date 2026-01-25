@@ -25,9 +25,12 @@ class SessionRepository {
      })
   }
 
- async deleteById(id: string) {
-    return prisma.session.delete({ where: { id } });
-  }
+async deleteById(sessionId: string) {
+ return prisma.session.delete({
+      where: { id: sessionId },
+    });
+}
+
    async findByUserAndDevice(userId: string, userAgent: string) {
     return prisma.session.findFirst({
       where: { userId, userAgent },
@@ -43,6 +46,21 @@ class SessionRepository {
       },
     });
   }
+ 
+async updateAccessToken(
+  sessionId: string,
+  accessToken: string,
+  expiry: Date
+) {
+  return prisma.session.update({
+    where: { id: sessionId },
+    data: {
+      accessToken,
+      accessTokenExpiry: expiry,
+    },
+  });
+}
+
 }
 
 export default SessionRepository;

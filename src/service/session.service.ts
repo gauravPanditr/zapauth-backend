@@ -63,26 +63,43 @@ export class SessionService {
   async findBySessionId(sessionId:string){
      return await this.sessionRepository.findBySesssionId(sessionId);
   }
-   async refreshAccessToken(refreshToken: string) {
-  if (!refreshToken) throw new UnauthorisedError("Refresh token missing");
+  async deleteCurrentLogin(sessionId:string){
+     return await this.sessionRepository.deleteById(sessionId);
+  }
+ async refreshAccessToken(refreshToken: string) {
+  
+  const session = await this.sessionRepository.findByRefreshToken(refreshToken);
+  if (!session) {
+    throw new UnauthorisedError("Refresh token not found");
+  }
 
-  // 1. Verify refresh token (no need to generate a new one)
+
+
   let payload: JwtPayloadUser;
   try {
-    payload = verify(refreshToken, serverConfig.REFRESH_TOKEN_SECRET) as JwtPayloadUser;
-  } catch (err) {
+    payload = verify(
+      refreshToken,
+      serverConfig.REFRESH_TOKEN_SECRET
+    ) as JwtPayloadUser;
+  } catch {
     throw new UnauthorisedError("Invalid refresh token");
   }
 
-  // 2. Extract admin info
-  const { userId, email, username } = payload;
-  const cleanPayload = { userId, email, username };
+ 
+  const newAccessToken = generateAccessToken({
+    userId: payload.userId,
+    email: payload.email,
+    username: payload.username,
+  });
 
-  // 3. Generate only a new access token
-  const newAccessToken = generateAccessToken(cleanPayload);
+
+  await this.sessionRepository.updateAccessToken(
+    session.id,
+    newAccessToken,
+    new Date(Date.now() + 15 * 60 * 1000) // 15 min expiry
+  );
 
   return { accessToken: newAccessToken };
-}
-
+ }
  
 }

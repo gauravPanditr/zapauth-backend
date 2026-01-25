@@ -18,6 +18,27 @@ async createUser(dto:CreateUserDTO) :Promise<User>{
     });
 
 }
+ async findByRefreshToken(refreshToken: string) {
+    return prisma.session.findFirst({
+      where: { refreshToken },
+    });
+  }
+
+ async updateAccessToken(
+    sessionId: string,
+    accessToken: string,
+    expiry: Date
+  ) {
+    return prisma.session.update({
+      where: { id: sessionId },
+      data: {
+        accessToken,
+        accessTokenExpiry: expiry,
+      },
+    });
+  }
+
+
   async findByEmail(email: string) {
     return prisma.user.findUnique({ where: { email } });
   }

@@ -19,7 +19,7 @@ export const validateProject=async(req:AuthenticatedProjectRequest,res: Response
         message: "Project credentials missing",
       });
     } 
-    console.log(projectId);
+    
     
         const project=await projectService.getProjectById(projectId);
          if (!project) {

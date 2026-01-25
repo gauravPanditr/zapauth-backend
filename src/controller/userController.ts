@@ -96,12 +96,12 @@ const projectId = req.project?.id;
         if(!userId || !sessionId){
             return res.status(401).json({ message: "Unauthorized" });
         }
-        console.log(sessionId);
+       
         
        const session=await sessionService.findBySessionId(sessionId);
 
        const user=await userService.findById(userId);
-        console.log(user);
+       
      return  res.status(StatusCodes.OK).json({
          session,
          user
@@ -119,7 +119,7 @@ export const refreshToken = async (req: AuthenticatedProjectRequest, res: Respon
   }
 
   const token = req.cookies["user-refresh-token"];
-
+console.log("🔵 refresh token received:",token);
   if (!token) {
     return res.status(401).json({ message: "Refresh token missing" });
   }
@@ -142,6 +142,23 @@ export const refreshToken = async (req: AuthenticatedProjectRequest, res: Respon
     return res.status(401).json({ message: "Unauthorized" });
   }
 };
+
+const deleteCurrentLogin=async(req:AuthenticatedUserRequest,res:Response)=>{
+    const userId=req.user?.userId;
+     const sessionId=req.session?.id;
+     console.log(sessionId);
+     console.log(userId);
+     
+      if(!userId || !sessionId){
+            return res.status(401).json({ message: "Unauthorized" });
+        }
+        await sessionService.deleteCurrentLogin(sessionId);
+          return res
+  .status(200)
+  .clearCookie("user-access-token", { sameSite: "none", secure: true })
+  .clearCookie("user-refresh-token", { sameSite: "none", secure: true })
+  .json({ message: "user login session deleted successfully" });
+  }
 
 
 
@@ -195,6 +212,7 @@ export default{
     forgotPassword,
     resetPassword,
     getCurrentUser,
-    refreshToken
+    refreshToken,
+    deleteCurrentLogin
     
 }
