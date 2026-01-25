@@ -56,7 +56,9 @@ export class SessionService {
       refreshToken: sessionDTO.refreshToken,
     };
   }
-
+async deleteByUserId(id:string){
+   return await this.sessionRepository.deleteByUserId(id);
+}
   async findByAccessToken(accessToken:string){
       return await this.sessionRepository.findByAccessToken(accessToken);
   }

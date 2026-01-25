@@ -58,6 +58,12 @@ async createUser(dto: CreateUserDTO){
     const emailService = new EmailService();
     await emailService.sendResetPasswordEmail(user.email, resetLink);
   }
+  async deleteAccount(userId: string) {
+
+return    await this.userRepository.deleteByuserId(userId);
+
+   
+  }
 
   async resetPassword(data: {
     token: string;

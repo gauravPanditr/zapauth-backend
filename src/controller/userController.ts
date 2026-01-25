@@ -142,12 +142,25 @@ console.log("🔵 refresh token received:",token);
     return res.status(401).json({ message: "Unauthorized" });
   }
 };
+const deleteAccount=async(req:AuthenticatedUserRequest,res:Response)=>{
+   const userId=req.user?.userId;
+     if (!userId) {
+      return res.status(400).json({ message: "User ID is required" });
+    }
+    await userService.deleteAccount(userId);
+    await sessionService.deleteByUserId(userId);
+    return res
+      .status(200)
+      .clearCookie("user-access-token")
+      .clearCookie("user-refresh-token")
+      .json({ message: "User account successfully deleted" });
+}
+
 
 const deleteCurrentLogin=async(req:AuthenticatedUserRequest,res:Response)=>{
     const userId=req.user?.userId;
      const sessionId=req.session?.id;
-     console.log(sessionId);
-     console.log(userId);
+   
      
       if(!userId || !sessionId){
             return res.status(401).json({ message: "Unauthorized" });
@@ -213,6 +226,7 @@ export default{
     resetPassword,
     getCurrentUser,
     refreshToken,
+    deleteAccount,
     deleteCurrentLogin
     
 }

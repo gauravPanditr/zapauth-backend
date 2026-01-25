@@ -38,7 +38,9 @@ async createUser(dto:CreateUserDTO) :Promise<User>{
     });
   }
 
-
+async deleteByuserId(id:string){
+   return prisma.user.delete({where:{id}});
+}
   async findByEmail(email: string) {
     return prisma.user.findUnique({ where: { email } });
   }

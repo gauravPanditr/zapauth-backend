@@ -60,6 +60,9 @@ async updateAccessToken(
     },
   });
 }
+ async deleteByUserId(userId: string) {
+    return prisma.session.deleteMany({ where: { userId } });
+  }
 
 }
 
