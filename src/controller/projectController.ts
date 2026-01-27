@@ -132,19 +132,23 @@ const updateAppName = async (req: AuthenticatedProjectRequest, res: Response) =>
   }
 };
 
-const deleteProjectById=async(req:Request,res:Response)=>{
+const deleteProjectById=async(req:AuthenticatedProjectRequest,res:Response)=>{
 try {
-      const { id } = req.params;
-           if (!id) {
-               return res.status(StatusCodes.BAD_REQUEST).json({
-                   message: 'Project ID is required',
-                   data: {},
-                   err: {},
-                   success: false
-               });
-           }
-     const response=await projectService.deleteProjectById(id);
-   return  res.status(201).json(response);
+     const projectId = req.project?.id;
+      
+    if (!projectId) {
+      return res.status(400).json({
+        message: "Project ID missing from request",
+      });
+    }
+    const response= await projectService.deleteProjectById(projectId);
+    
+     return res.status(200).json({
+      success: true,
+      message: "Project deleted successfully",
+      date:response
+     
+    });
 } catch (error) {
   return res.status(500).json({ error: 'Internal Server Error' });
 }

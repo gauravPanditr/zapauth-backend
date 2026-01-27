@@ -28,6 +28,9 @@ class AdminRespository {
       },
     });
   }
+  async deleteById(id:string){
+     return prisma.admins.delete({where:{id}});
+  }
 
   async getAdminByUsername(username: string): Promise<Admins | null> {
     const user = await prisma.admins.findFirst({ where: { username: username } });

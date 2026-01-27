@@ -6,6 +6,10 @@ import { StatusCodes } from "http-status-codes";
 import { unknownErrorResponse } from "../utils/response.utils";
 
 import { AuthenticatedAdminRequest } from "../types/requestwithAdmin";
+import UnauthorisedError from "../errors/unauthorisedError";
+import InternalServerError from "../errors/internalServer.error";
+
+import NotFoundError from "../errors/notfound.error";
 
 
 const adminService = new AdminService(new AdminRepository());
@@ -13,11 +17,18 @@ const adminService = new AdminService(new AdminRepository());
 const createAdmin = async (req: Request, res: Response) => {
   try {
     const response = await adminService.createAdmin(req.body);
-    return res.json(response);
+      return res.status(StatusCodes.OK).json({
+      message: "Successfully Admin created",
+      data: response,
+      err: {},
+      success: true,
+    });
+   
   } catch (error) {
-    return res.status(500).json({ error: "Internal Server Error" });
+    return InternalServerError;
   }
 };
+
  const loginAdmin = async (req: Request, res: Response) => {
   try {
     const { accessToken, refreshToken } =
@@ -67,18 +78,13 @@ const getMe = async (req:AuthenticatedAdminRequest, res: Response) => {
       try {
         const adminId = req.admin?.id;
         if (!adminId) {
-            return res.status(StatusCodes.BAD_REQUEST).json({
-                message: 'Admin ID is required',
-                data: {},
-                err: {},
-                success: false
-            });
+            return NotFoundError;
         }
         const response = await adminService.getAdminById(adminId);
         
         return res.json(response);
     } catch (error) {
-        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(unknownErrorResponse);
+        return InternalServerError;
     }
     
    
@@ -124,7 +130,7 @@ export const refreshToken = async (req: Request, res: Response) => {
       message: "Access token refreshed successfully",
     });
   } catch {
-    return res.status(401).json({ message: "Unauthorized" });
+    return UnauthorisedError;
   }
 };
 
@@ -134,7 +140,7 @@ const deleteLoginSession =
     const adminId = req.admin?.id;
 
     if (!adminId) {
-    return   res.status(401).json({ message: "Unauthorized" });
+    return  UnauthorisedError
     } 
 
   
@@ -146,6 +152,7 @@ const deleteLoginSession =
   .clearCookie("admin-refresh-token", { sameSite: "none", secure: true })
   .json({ message: "Admin login session deleted successfully" });
   }
+
 
 export default {
     createAdmin,

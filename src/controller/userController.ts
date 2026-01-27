@@ -37,6 +37,7 @@ return  res.status(201).json({
     data: user,
   });
 };
+
  const login =async (req: AuthenticatedProjectRequest, res: Response) => {
 const projectId = req.project?.id;
 

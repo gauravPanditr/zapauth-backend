@@ -17,6 +17,8 @@ class ProjectRespository{
     return project;
   }
 
+
+
   async updateProjectKey(id: string, projectKey: string) {
     const updatedProject = await prisma.project.update({
       where: { id },
@@ -31,6 +33,7 @@ class ProjectRespository{
     });
     return updatedAppName;
   }
+  
 
   async getProjectByKey(key:string){
      return prisma.project.findMany({

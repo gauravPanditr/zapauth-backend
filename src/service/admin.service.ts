@@ -25,6 +25,10 @@ class AdminService {
 
     }
 
+    async deleteByAdminId(id:string){
+       return this.adminRepository.deleteById(id);
+    }
+
    async loginAdmin(dto: LoginAdminDto) {
     const admin = await this.adminRepository.getAdminByEmail(dto.email);
     if (!admin) {
