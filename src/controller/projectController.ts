@@ -135,7 +135,7 @@ const updateAppName = async (req: AuthenticatedProjectRequest, res: Response) =>
 const deleteProjectById=async(req:AuthenticatedProjectRequest,res:Response)=>{
 try {
      const projectId = req.project?.id;
-      
+     
     if (!projectId) {
       return res.status(400).json({
         message: "Project ID missing from request",

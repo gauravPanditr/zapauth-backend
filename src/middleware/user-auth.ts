@@ -7,6 +7,7 @@ import UserRepository from "../repositories/user.repository";
 
 import SessionRepository from "../repositories/session.repository";
 import { SessionService } from "../service/session.service";
+import NotFoundError from "../errors/notfound.error";
 
 const userService = new UserService(new UserRepository());
 const sessionService = new SessionService(new SessionRepository());
@@ -39,8 +40,8 @@ export const authenticateUser = async (
     // 3️ Validate session (DB-controlled access)
     const session = await sessionService.findByAccessToken(token);
     if (!session) {
-      res.status(401).json({ message: "Session not found" });
-      return;
+       NotFoundError;
+       return;
     }
 
     // if (session.accessTokenExpiry < new Date()) {
