@@ -1,7 +1,7 @@
 import { StatusCodes } from "http-status-codes";
 import ProjectRespository from "../repositories/project.repository";
 import ProjectService from "../service/project.service";
-import { Request, Response } from "express";
+import {  Response } from "express";
 import { CreateProjectDTO } from "../dtos/createProjectdto";
 import UnauthorisedError from "../errors/unauthorisedError";
 import { AuthenticatedAdminRequest } from "../types/requestwithAdmin";

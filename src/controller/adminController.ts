@@ -134,6 +134,21 @@ export const refreshToken = async (req: Request, res: Response) => {
   }
 };
 
+const deleteAccount=async(req:AuthenticatedAdminRequest,res:Response)=>{
+   const adminId = req.admin?.id;
+
+    if (!adminId) {
+    return  UnauthorisedError
+    } 
+    await adminService.deleteLoginSession(adminId);
+
+  return res
+  .status(200)
+  .clearCookie("admin-access-token", { sameSite: "none", secure: true })
+  .clearCookie("admin-refresh-token", { sameSite: "none", secure: true })
+  .json({ message: "Admin Account deleted successfully" });
+
+}
 
 const deleteLoginSession = 
   async (req: AuthenticatedAdminRequest, res: Response) => {
@@ -160,5 +175,6 @@ export default {
     getById,
     refreshToken,
     getMe,
-    deleteLoginSession
+    deleteLoginSession,
+    deleteAccount
 }

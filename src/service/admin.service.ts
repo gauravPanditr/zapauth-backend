@@ -25,9 +25,30 @@ class AdminService {
 
     }
 
-    async deleteByAdminId(id:string){
-       return this.adminRepository.deleteById(id);
+    async deleteAccount(adminId: string) {
+    // Check if admin exists (optional, for error handling)
+    const admin = await this.adminRepository.deleteAdmin(adminId);
+    if (!admin) {
+      throw new Error('Admin not found');
     }
+
+    // Get projects owned by the admin
+    const projects = await this.adminRepository.getProjectsByOwner(adminId);
+    const projectIds = projects.map((project) => project.id);
+
+    // Delete projects
+    await this.adminRepository.deleteProjectsByOwner(adminId);
+
+    // Delete users associated with the projects
+    await this.adminRepository.deleteUsersByProjectIds(projectIds);
+
+    // Delete sessions associated with the projects
+    await this.adminRepository.deleteSessionsByProjectIds(projectIds);
+
+
+    // Delete refresh tokens for the admin (to clean up orphaned records)
+    await this.adminRepository.deleteRefreshTokensByAdminId(adminId);
+  }
 
    async loginAdmin(dto: LoginAdminDto) {
     const admin = await this.adminRepository.getAdminByEmail(dto.email);

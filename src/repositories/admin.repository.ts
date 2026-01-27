@@ -17,6 +17,32 @@ class AdminRespository {
     })
     return newAdmin;
   }
+async deleteAdmin(adminId: string) {
+    return await prisma.admins.delete({ where: { id: adminId } });
+  }
+
+  async getProjectsByOwner(adminId: string) {
+    return await prisma.project.findMany({ where: { ownerId: adminId } });
+  }
+
+  async deleteProjectsByOwner(adminId: string) {
+    return await prisma.project.deleteMany({ where: { ownerId: adminId } });
+  }
+
+  async deleteUsersByProjectIds(projectIds: string[]) {
+    return await prisma.user.deleteMany({ where: { projectId: { in: projectIds } } });
+  }
+
+  async deleteSessionsByProjectIds(projectIds: string[]) {
+    return await prisma.session.deleteMany({ where: { projectId: { in: projectIds } } });
+  }
+
+
+  async deleteRefreshTokensByAdminId(adminId: string) {
+    return await prisma.refreshToken.deleteMany({ where: { adminId } });
+  }
+
+
  async deleteTokens(adminId: string){
     return prisma.admins.update({
       where: { id: adminId },
@@ -61,7 +87,7 @@ class AdminRespository {
       data: { token, adminId, expiresAt },
     });
   }
-
+ 
   async findRefreshToken(token: string): Promise<RefreshToken | null> {
     return prisma.refreshToken.findUnique({ where: { token } });
   }
