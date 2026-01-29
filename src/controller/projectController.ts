@@ -1,7 +1,7 @@
 import { StatusCodes } from "http-status-codes";
 import ProjectRespository from "../repositories/project.repository";
 import ProjectService from "../service/project.service";
-import {  Response } from "express";
+import {  Response,Request } from "express";
 import { CreateProjectDTO } from "../dtos/createProjectdto";
 import UnauthorisedError from "../errors/unauthorisedError";
 import { AuthenticatedAdminRequest } from "../types/requestwithAdmin";
@@ -132,9 +132,9 @@ const updateAppName = async (req: AuthenticatedProjectRequest, res: Response) =>
   }
 };
 
-const deleteProjectById=async(req:AuthenticatedProjectRequest,res:Response)=>{
+const deleteProjectById=async(req:Request,res:Response)=>{
 try {
-     const projectId = req.project?.id;
+     const { projectId } = req.params;
      
     if (!projectId) {
       return res.status(400).json({

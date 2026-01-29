@@ -7,7 +7,7 @@ const projectRouter = Router();
 
 projectRouter.post("/create", projectController.createProject);
 //projectRouter.put("/update",projectController.updateProject);
-projectRouter.delete('/delete',validateProject,projectController.deleteProjectById);
+projectRouter.delete('/delete/:projectId',projectController.deleteProjectById);
 projectRouter.get('/projects',projectController.getAllProjectsByAdmin);
 projectRouter.get('/:id/projects',projectController.getAllProjectsByAdmin);
 projectRouter.put('/generate-new-key',validateProject,projectController.createNewProjectKey);

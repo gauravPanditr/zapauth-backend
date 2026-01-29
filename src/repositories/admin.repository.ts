@@ -18,29 +18,40 @@ class AdminRespository {
     return newAdmin;
   }
 async deleteAdmin(adminId: string) {
-    return await prisma.admins.delete({ where: { id: adminId } });
-  }
+  return await prisma.$transaction(async (tx) => {
+    // 1. Find all project IDs owned by this admin
+    const projects = await tx.project.findMany({
+      where: { ownerId: adminId },
+      select: { id: true }
+    });
+    const projectIds = projects.map(p => p.id);
 
-  async getProjectsByOwner(adminId: string) {
-    return await prisma.project.findMany({ where: { ownerId: adminId } });
-  }
+    // 2. Delete Sessions related to those projects
+    await tx.session.deleteMany({
+      where: { projectId: { in: projectIds } }
+    });
 
-  async deleteProjectsByOwner(adminId: string) {
-    return await prisma.project.deleteMany({ where: { ownerId: adminId } });
-  }
+    // 3. Delete Users related to those projects
+    await tx.user.deleteMany({
+      where: { projectId: { in: projectIds } }
+    });
 
-  async deleteUsersByProjectIds(projectIds: string[]) {
-    return await prisma.user.deleteMany({ where: { projectId: { in: projectIds } } });
-  }
+    // 4. Delete the Projects
+    await tx.project.deleteMany({
+      where: { ownerId: adminId }
+    });
 
-  async deleteSessionsByProjectIds(projectIds: string[]) {
-    return await prisma.session.deleteMany({ where: { projectId: { in: projectIds } } });
-  }
+    // 5. Delete Refresh Tokens
+    await tx.refreshToken.deleteMany({
+      where: { adminId: adminId }
+    });
 
-
-  async deleteRefreshTokensByAdminId(adminId: string) {
-    return await prisma.refreshToken.deleteMany({ where: { adminId } });
-  }
+    // 6. Finally, delete the Admin
+    return await tx.admins.delete({
+      where: { id: adminId }
+    });
+  });
+}
 
 
  async deleteTokens(adminId: string){

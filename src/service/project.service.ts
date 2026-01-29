@@ -69,7 +69,7 @@ async updateProjectAppName(projectId: string, newAppName: string) {
    }
  
    async deleteProjectById(id:string){
-    const deleteproject=await this.projectrepository.deleteByProjectId(id);
+    const deleteproject=await this.projectrepository.deleteProjectById(id);
     return deleteproject;
    }
    

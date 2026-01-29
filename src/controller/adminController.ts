@@ -140,7 +140,7 @@ const deleteAccount=async(req:AuthenticatedAdminRequest,res:Response)=>{
     if (!adminId) {
     return  UnauthorisedError
     } 
-    await adminService.deleteLoginSession(adminId);
+    await adminService.deleteAccount(adminId);
 
   return res
   .status(200)

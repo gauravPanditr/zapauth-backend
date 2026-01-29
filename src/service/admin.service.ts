@@ -32,22 +32,7 @@ class AdminService {
       throw new Error('Admin not found');
     }
 
-    // Get projects owned by the admin
-    const projects = await this.adminRepository.getProjectsByOwner(adminId);
-    const projectIds = projects.map((project) => project.id);
-
-    // Delete projects
-    await this.adminRepository.deleteProjectsByOwner(adminId);
-
-    // Delete users associated with the projects
-    await this.adminRepository.deleteUsersByProjectIds(projectIds);
-
-    // Delete sessions associated with the projects
-    await this.adminRepository.deleteSessionsByProjectIds(projectIds);
-
-
-    // Delete refresh tokens for the admin (to clean up orphaned records)
-    await this.adminRepository.deleteRefreshTokensByAdminId(adminId);
+    
   }
 
    async loginAdmin(dto: LoginAdminDto) {
