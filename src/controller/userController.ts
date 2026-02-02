@@ -9,6 +9,8 @@ import SessionRepository from "../repositories/session.repository";
 import { CreateSessionDTO } from "../dtos/sessionUser.dto";
 import { AuthenticatedUserRequest } from "../types/requestwithUser";
 import { StatusCodes } from "http-status-codes";
+import { securityLogService } from "../service/securityLog.service";
+import { EventCode } from "../types/event_code";
 
 
 const userService = new UserService(new UserRepository());
@@ -31,6 +33,17 @@ const createUser = async (
   const dto = new CreateUserDTO(email, password, username,projectId);
 
   const user = await userService.createUser(dto);
+await securityLogService.logEvent({
+  userId: user.id,
+  projectId: projectId,
+
+  event: {
+    code: EventCode.ACCOUNT_CREATION,
+    success: true,
+  },
+
+  message: "User account created",
+});
 
 return  res.status(201).json({
     message: "User created successfully",

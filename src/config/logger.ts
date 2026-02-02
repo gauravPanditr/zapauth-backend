@@ -10,18 +10,12 @@ export const logger = winston.createLogger({
   ),
 
   transports: [
-    // Console me bhi dikhe
     new winston.transports.Console(),
 
-    // MongoDB me store
     new winston.transports.MongoDB({
-      db: process.env.MONGO_URL as string,
+      db: process.env.MONGODB_URL!,
       collection: "security_logs",
-      level: "info",
       tryReconnect: true,
-      options: {
-        useUnifiedTopology: true,
-      },
     }),
   ],
 });

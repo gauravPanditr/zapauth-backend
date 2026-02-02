@@ -10,5 +10,6 @@ export default {
       REFRESH_TOKEN_SECRET:(process.env.REFRESH_TOKEN_SECRET==undefined)?'DUMMY':process.env.REFRESH_TOKEN_SECRET,
       RESEND_API_KEY:(process.env.RESEND_API_KEY==undefined)?'DUMMY':process.env.RESEND_API_KEY,
       EMAIL_FROM:(process.env.EMAIL_FROM==undefined)?'DUMMY':process.env.EMAIL_FROM,
-} 
-  
+       MONGODB_URL:(process.env.MONGODB_URL==undefined)?'DUMMY':process.env.MONGODB_URL,
+     
+}
