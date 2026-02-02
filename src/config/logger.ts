@@ -1,6 +1,6 @@
 import winston from "winston";
 import "winston-mongodb";
-
+import "dotenv/config";
 export const logger = winston.createLogger({
   level: "info",
 
@@ -19,3 +19,15 @@ export const logger = winston.createLogger({
     }),
   ],
 });
+const testMongoConnection = async () => {
+  try {
+    const mongoose = require("mongoose");
+    await mongoose.connect(process.env.MONGODB_URL);
+    console.log(" MongoDB (Winston logs) connected successfully");
+    await mongoose.connection.close(); // just test, close connection
+  } catch (err) {
+    console.error(" MongoDB connection failed:", err);
+  }
+};
+
+testMongoConnection();
