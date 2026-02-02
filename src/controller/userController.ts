@@ -33,7 +33,8 @@ const createUser = async (
   const dto = new CreateUserDTO(email, password, username,projectId);
 
   const user = await userService.createUser(dto);
-await securityLogService.logEvent({
+  console.log(user);
+const security=await securityLogService.logEvent({
   userId: user.id,
   projectId: projectId,
 
@@ -44,7 +45,8 @@ await securityLogService.logEvent({
 
   message: "User account created",
 });
-
+  console.log(security);
+  
 return  res.status(201).json({
     message: "User created successfully",
     data: user,
