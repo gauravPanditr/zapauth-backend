@@ -1,32 +1,6 @@
 import winston from "winston";
-
-
-let MongoDBTransport: any = null;
-
-try {
-  MongoDBTransport = require("winston-mongodb").MongoDB;
-} catch (err) {
-  console.log("Mongo transport not available");
-}
-
-const transports: any[] = [
-  new winston.transports.Console(),
-];
-
-const uri = process.env.MONGODB_URL;
-
-if (uri && uri.startsWith("mongodb") && MongoDBTransport) {
-  transports.push(
-    new MongoDBTransport({
-      db: uri,
-      collection: "security_logs",
-      tryReconnect: true,
-    })
-  );
-} else {
-  console.log("Mongo logging disabled  URI missing or invalid");
-}
-
+import "winston-mongodb";
+import "dotenv/config";
 export const logger = winston.createLogger({
   level: "info",
 
@@ -35,5 +9,24 @@ export const logger = winston.createLogger({
     winston.format.json()
   ),
 
-  transports,
+  transports: [
+    new winston.transports.Console(),
+    new winston.transports.MongoDB({
+      db: process.env.MONGODB_URL!,
+      collection: "security_logs",
+      tryReconnect: true,
+    }),
+  ],
 });
+const testMongoConnection = async () => {
+  try {
+    const mongoose = require("mongoose");
+    await mongoose.connect(process.env.MONGODB_URL);
+    console.log(" MongoDB (Winston logs) connected successfully");
+    await mongoose.connection.close(); // just test, close connection
+  } catch (err) {
+    console.error(" MongoDB connection failed:", err);
+  }
+};
+
+testMongoConnection();
