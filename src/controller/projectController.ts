@@ -32,7 +32,7 @@ const projectService = new ProjectService(new ProjectRespository());
   } catch (err: any) {
     console.error("Create Project Error:", err);
 
-    // 5️⃣ Handle Unauthorized separately
+   
     if (err instanceof UnauthorisedError) {
       return res.status(401).json({ error: err.message });
     }
