@@ -33,8 +33,8 @@ const createUser = async (
   const dto = new CreateUserDTO(email, password, username,projectId);
 
   const user = await userService.createUser(dto);
-  console.log(user);
-const security=await securityLogService.logEvent({
+ 
+await securityLogService.logEvent({
   userId: user.id,
   projectId: projectId,
 
@@ -45,7 +45,7 @@ const security=await securityLogService.logEvent({
 
   message: "User account created",
 });
-  console.log(security);
+ 
   
 return  res.status(201).json({
     message: "User created successfully",
@@ -72,7 +72,6 @@ const projectId = req.project?.id;
 
   const userAgentHeader = req.headers["user-agent"] || "";
   const details = parseUserAgent(userAgentHeader);
-
  const sessionDTO = new CreateSessionDTO({
   userId: user.id,
   projectId,
@@ -88,6 +87,19 @@ const projectId = req.project?.id;
 
   const { session, accessToken, refreshToken } =
     await sessionService.createLoginSession(sessionDTO);
+
+   await securityLogService.logEvent({
+  userId: user.id,
+  projectId: projectId,
+
+  event: {
+    code: EventCode.PASSWORD_LOGIN,
+    success: true,
+  },
+  sessionId:session.id,
+
+  message: "User Login Successfully",
+});
 
   // Set cookies
   return res
@@ -182,6 +194,8 @@ const deleteCurrentLogin=async(req:AuthenticatedUserRequest,res:Response)=>{
             return res.status(401).json({ message: "Unauthorized" });
         }
         await sessionService.deleteCurrentLogin(sessionId);
+   
+
           return res
   .status(200)
   .clearCookie("user-access-token", { sameSite: "none", secure: true })
