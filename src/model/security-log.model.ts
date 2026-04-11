@@ -1,19 +1,5 @@
 import { Schema, model, Model, Document } from "mongoose";
-
-// ─── EventCode Enum ───────────────────────────────────────────────
-export enum EventCode {
-  LOGIN_SUCCESS     = "LOGIN_SUCCESS",
-  LOGIN_FAILED      = "LOGIN_FAILED",
-  LOGOUT            = "LOGOUT",
-  REGISTER          = "REGISTER",
-  PASSWORD_CHANGE   = "PASSWORD_CHANGE",
-  PASSWORD_RESET    = "PASSWORD_RESET",
-  TOKEN_REFRESH     = "TOKEN_REFRESH",
-  UNAUTHORIZED      = "UNAUTHORIZED",
-  ACCOUNT_LOCKED    = "ACCOUNT_LOCKED",
-  ACCOUNT_DELETED   = "ACCOUNT_DELETED",
-}
-
+import { EventCode } from "../types/event_code";
 // ─── Interface ────────────────────────────────────────────────────
 export interface ISecurityLog extends Document {
   userId:    string;   // Prisma user ID (string, not ObjectId)
