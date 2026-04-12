@@ -178,7 +178,7 @@ const deleteAccount=async(req:AuthenticatedUserRequest,res:Response)=>{
     }
     await userService.deleteAccount(userId);
     await sessionService.deleteByUserId(userId);
-      await Log.deleteMany({ userId });
+  //    await Log.deleteMany({ userId });
     return res
       .status(200)
       .clearCookie("user-access-token")
