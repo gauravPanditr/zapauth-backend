@@ -11,6 +11,7 @@ import { AuthenticatedUserRequest } from "../types/requestwithUser";
 import { StatusCodes } from "http-status-codes";
 import { securityLogService } from "../service/securityLog.service";
 import { EventCode } from "../types/event_code";
+import { Log } from "../model/security-log.model";
 
 
 const userService = new UserService(new UserRepository());
@@ -177,6 +178,7 @@ const deleteAccount=async(req:AuthenticatedUserRequest,res:Response)=>{
     }
     await userService.deleteAccount(userId);
     await sessionService.deleteByUserId(userId);
+      await Log.deleteMany({ userId });
     return res
       .status(200)
       .clearCookie("user-access-token")
@@ -186,15 +188,27 @@ const deleteAccount=async(req:AuthenticatedUserRequest,res:Response)=>{
 
 
 const deleteCurrentLogin=async(req:AuthenticatedUserRequest,res:Response)=>{
-    const userId=req.user?.userId;
-     const sessionId=req.session?.id;
+   const userId    = req.user?.userId;
+  const sessionId = req.session?.id;
+  const projectId = req.project?.id;
    
      
       if(!userId || !sessionId){
             return res.status(401).json({ message: "Unauthorized" });
         }
         await sessionService.deleteCurrentLogin(sessionId);
-   
+     await securityLogService.logEvent({
+  userId: userId!,
+  projectId: projectId,
+
+  event: {
+    code: EventCode.LOGOUT,
+    success: true,
+  },
+  
+
+  message: "User Login Successfully",
+});
 
           return res
   .status(200)

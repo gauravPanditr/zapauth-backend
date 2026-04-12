@@ -37,7 +37,7 @@ const projectService = new ProjectService(new ProjectRespository());
       return res.status(401).json({ error: err.message });
     }
 
-    // 6️⃣ Generic server error
+   
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
