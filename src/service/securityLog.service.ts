@@ -43,6 +43,7 @@ class SecurityLogService {
     return filter;
   }
 
+
   private async paginate(filter: object, page: number, limit: number) {
     const [logs, totalCount] = await Promise.all([
       Log.find(filter)
@@ -59,12 +60,16 @@ class SecurityLogService {
       currentPage: page,
     };
   }
+  async deleleLogs(id:string){
+     return Log.deleteMany({id});
+  }
 
   // ── Query methods (called by controller) ──────────────────────
   async getLogsByUserID(params: QueryParams) {
     const filter = this.buildFilter(params);
     return this.paginate(filter, params.page ?? 1, params.queryItemCount ?? 10);
   }
+
 
   async getAllLogsByEvent(params: QueryParams) {
     const filter = this.buildFilter(params);

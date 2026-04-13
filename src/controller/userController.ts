@@ -11,7 +11,7 @@ import { AuthenticatedUserRequest } from "../types/requestwithUser";
 import { StatusCodes } from "http-status-codes";
 import { securityLogService } from "../service/securityLog.service";
 import { EventCode } from "../types/event_code";
-import { Log } from "../model/security-log.model";
+
 
 
 const userService = new UserService(new UserRepository());
@@ -148,7 +148,7 @@ export const refreshToken = async (req: AuthenticatedProjectRequest, res: Respon
   }
 
   const token = req.cookies["user-refresh-token"];
-console.log("🔵 refresh token received:",token);
+console.log("🔵refresh token received:",token);
   if (!token) {
     return res.status(401).json({ message: "Refresh token missing" });
   }
@@ -178,7 +178,7 @@ const deleteAccount=async(req:AuthenticatedUserRequest,res:Response)=>{
     }
     await userService.deleteAccount(userId);
     await sessionService.deleteByUserId(userId);
-    await Log.deleteMany({ userId });
+    await securityLogService.deleleLogs(userId);
     return res
       .status(200)
       .clearCookie("user-access-token")
