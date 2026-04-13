@@ -9,6 +9,7 @@ import type { Admins } from "@prisma/client";
 import  {JwtPayload} from "../types/jwtPayload"
 import { verify } from "jsonwebtoken";
 import serverConfig from "../config"
+import UpdateAdminDto from "../dtos/updateAdmin.dto";
 
 
 class AdminService {
@@ -142,6 +143,11 @@ async deleteLoginSession(adminId: string) {
     throw err; // or wrap in custom error
   }
 }
+
+async updateAdmin(adminId: string, data: UpdateAdminDto) {
+  return this.adminRepository.updateAdmin(adminId, data);
+}
+
 }
 
 

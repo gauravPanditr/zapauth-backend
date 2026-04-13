@@ -61,6 +61,8 @@ class SecurityLogService {
     };
   }
   async deleleLogs(id:string){
+    
+    
      return Log.deleteMany({id});
   }
 

@@ -17,5 +17,5 @@ adminrouter.get("/:id",adminController.getById);
 adminrouter.delete("/delete",authenticateAdmin,adminController.deleteAccount);
 adminrouter.post('/logout',authenticateAdmin,adminController.deleteLoginSession);
 adminrouter.post('/refresh',adminController.refreshToken)
-
+adminrouter.patch('/update',authenticateAdmin,adminController.updateAdmin);
 export default adminrouter;

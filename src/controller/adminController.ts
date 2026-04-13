@@ -167,6 +167,22 @@ const deleteLoginSession =
   .clearCookie("admin-refresh-token", { sameSite: "none", secure: true })
   .json({ message: "Admin login session deleted successfully" });
   }
+const updateAdmin = async (req: AuthenticatedAdminRequest, res: Response) => {
+  const adminId = req.admin?.id;
+
+  if (!adminId) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
+  const updated = await adminService.updateAdmin(adminId, req.body);
+
+  return res.status(200).json({
+    message: "Admin updated successfully",
+    data: updated,
+  });
+};
+  
+  
 
 
 export default {
@@ -176,5 +192,6 @@ export default {
     refreshToken,
     getMe,
     deleteLoginSession,
-    deleteAccount
+    deleteAccount,
+    updateAdmin
 }

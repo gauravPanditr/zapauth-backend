@@ -176,9 +176,10 @@ const deleteAccount=async(req:AuthenticatedUserRequest,res:Response)=>{
      if (!userId) {
       return res.status(400).json({ message: "User ID is required" });
     }
+   
     await userService.deleteAccount(userId);
     await sessionService.deleteByUserId(userId);
-    await securityLogService.deleleLogs(userId);
+     await securityLogService.deleleLogs(userId);
     return res
       .status(200)
       .clearCookie("user-access-token")
