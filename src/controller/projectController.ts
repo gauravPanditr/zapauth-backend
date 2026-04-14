@@ -131,6 +131,23 @@ const updateAppName = async (req: AuthenticatedProjectRequest, res: Response) =>
     });
   }
 };
+const deleteAllProject = async (req: Request, res: Response) => {
+  try {
+    const result = await projectService.deleteAllproject();
+
+    return res.status(200).json({
+      message: "All projects deleted successfully",
+      data: result
+    });
+
+  } catch (error: any) {
+    console.error(error);
+
+    return res.status(500).json({
+      message: error.message || "Internal Server Error"
+    });
+  }
+};
 
 const deleteProjectById=async(req:Request,res:Response)=>{
 try {
@@ -159,6 +176,7 @@ export default{
     updateAppName,
     deleteProjectById,
     getAllProjectsByAdmin,
-    createNewProjectKey
+    createNewProjectKey,
+    deleteAllProject
 }
 

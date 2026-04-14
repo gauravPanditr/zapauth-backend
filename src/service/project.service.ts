@@ -29,6 +29,9 @@ async createProject(dto: CreateProjectDTO, adminId: string): Promise<Project> {
   return updatedProject;
 }
  
+async deleteAllproject(){
+   return this.projectrepository.deleteAllProject();
+}
 
 async updateProjectKey(projectId: string){
   const project = await this.projectrepository.getProjectById(projectId);

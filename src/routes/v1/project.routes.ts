@@ -12,5 +12,5 @@ projectRouter.get('/projects',projectController.getAllProjectsByAdmin);
 projectRouter.get('/:id/projects',projectController.getAllProjectsByAdmin);
 projectRouter.put('/generate-new-key',validateProject,projectController.createNewProjectKey);
 projectRouter.put('/update-appName',validateProject,projectController.updateAppName);
-
+projectRouter.delete('/delete/all',projectController.deleteAllProject);
 export default projectRouter;

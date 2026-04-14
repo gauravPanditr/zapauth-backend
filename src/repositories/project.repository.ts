@@ -40,6 +40,21 @@ class ProjectRespository{
       where:{projectKey:key}
      })
   }
+
+  async deleteAllProject(){
+     return await prisma.$transaction(async(tx)=>{
+       
+       await tx.session.deleteMany({});
+       
+
+   
+    await tx.user.deleteMany({});
+
+    
+    await tx.project.deleteMany({});
+     })
+  }
+
 async deleteProjectById(projectId:string) {
   // We use a transaction so all deletes happen together or not at all
   return await prisma.$transaction(async (tx) => {
@@ -79,6 +94,8 @@ async getAllProjectsByAdmin(adminId: string): Promise<Project[]> {
     orderBy: { createdAt: 'desc' } 
   });
 }
+
+
 }
 
 
