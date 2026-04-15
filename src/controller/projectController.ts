@@ -170,6 +170,22 @@ try {
   return res.status(500).json({ error: 'Internal Server Error' });
 }
 }
+const updateProject = async (req: AuthenticatedProjectRequest, res: Response) => {
+  const projectId = req.project?.id;
+
+  if (!projectId) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
+  const updated = await projectService.updateProject(projectId, req.body);
+
+  return res.status(200).json({
+    message: "Project updated successfully",
+    data: updated,
+  });
+};
+  
+
 
 export default{
     createProject,
@@ -177,6 +193,7 @@ export default{
     deleteProjectById,
     getAllProjectsByAdmin,
     createNewProjectKey,
-    deleteAllProject
+    deleteAllProject,
+    updateProject
 }
 

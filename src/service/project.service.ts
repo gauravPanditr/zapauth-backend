@@ -3,6 +3,7 @@ import { CreateProjectDTO } from "../dtos/createProjectdto";
 import ProjectRespository from "../repositories/project.repository";
 import jwt from "jsonwebtoken";
 import serverConfig from "../config"
+import UpdateProjectDto from "../dtos/updateProject.dto";
 class ProjectService{
     private projectrepository:ProjectRespository;
      constructor(projectrepository:ProjectRespository){
@@ -61,7 +62,9 @@ async updateProjectAppName(projectId: string, newAppName: string) {
   return await this.projectrepository.updateAppName(projectId, newAppName);
 }
 
- 
+ async updateProject(adminId: string, data: UpdateProjectDto) {
+   return this.projectrepository.projectUpdate(adminId, data);
+ }
 
    
 async getAllProjectsByAdmin(adminId:string){

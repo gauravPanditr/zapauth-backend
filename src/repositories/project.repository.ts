@@ -1,6 +1,7 @@
 import type { Project } from "@prisma/client";
 import { prisma } from "../config/dbConfig";
 import { CreateProjectDTO } from "../dtos/createProjectdto";
+import UpdateProjectDto from "../dtos/updateProject.dto";
 
 class ProjectRespository{
   async createProject(dto: CreateProjectDTO, adminId: string) {
@@ -94,7 +95,12 @@ async getAllProjectsByAdmin(adminId: string): Promise<Project[]> {
     orderBy: { createdAt: 'desc' } 
   });
 }
-
+  async projectUpdate(projectId: string, data: UpdateProjectDto) {
+  return prisma.project.update({
+    where: { id: projectId },
+    data,
+  });
+}
 
 }
 
