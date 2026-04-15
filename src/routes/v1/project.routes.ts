@@ -10,6 +10,7 @@ projectRouter.patch("/update",projectController.updateProject);
 projectRouter.delete('/delete/:projectId',projectController.deleteProjectById);
 projectRouter.get('/projects',projectController.getAllProjectsByAdmin);
 projectRouter.get('/:id/projects',projectController.getAllProjectsByAdmin);
+projectRouter.get('/:id',projectController.getProjectById);
 projectRouter.put('/generate-new-key',validateProject,projectController.createNewProjectKey);
 //projectRouter.put('/update-appName',validateProject,projectController.updateAppName);
 projectRouter.delete('/delete/all',projectController.deleteAllProject);

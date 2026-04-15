@@ -185,6 +185,20 @@ const updateProject = async (req: AuthenticatedProjectRequest, res: Response) =>
   });
 };
   
+const getProjectById=async(req: AuthenticatedProjectRequest, res: Response)=>{
+   const projectId = req.project?.id;
+
+  if (!projectId) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
+  const project = await projectService.getProjectById(projectId);
+
+  return res.status(200).json({
+   
+    data: project,
+  });
+}
 
 
 export default{
@@ -194,6 +208,7 @@ export default{
     getAllProjectsByAdmin,
     createNewProjectKey,
     deleteAllProject,
-    updateProject
+    updateProject,
+    getProjectById
 }
 

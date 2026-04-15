@@ -66,7 +66,6 @@ async updateProjectAppName(projectId: string, newAppName: string) {
    return this.projectrepository.projectUpdate(adminId, data);
  }
 
-   
 async getAllProjectsByAdmin(adminId:string){
      return await this.projectrepository.getAllProjectsByAdmin(adminId);
    }
