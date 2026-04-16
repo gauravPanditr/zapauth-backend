@@ -131,7 +131,7 @@ const updateAppName = async (req: AuthenticatedProjectRequest, res: Response) =>
     });
   }
 };
-const deleteAllProject = async (req: Request, res: Response) => {
+const deleteAllProject = async ( res: Response) => {
   try {
     const result = await projectService.deleteAllproject();
 
@@ -186,7 +186,7 @@ const updateProject = async (req: AuthenticatedProjectRequest, res: Response) =>
 };
   
 const getProjectById=async(req: AuthenticatedProjectRequest, res: Response)=>{
-   const projectId = req.project?.id;
+   const projectId = req.params.id;
 
   if (!projectId) {
     return res.status(401).json({ message: "Unauthorized" });
