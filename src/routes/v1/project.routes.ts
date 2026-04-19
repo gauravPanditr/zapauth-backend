@@ -6,7 +6,7 @@ const projectRouter = Router();
 
 
 projectRouter.post("/create", projectController.createProject);
-projectRouter.patch("/update",projectController.updateProject);
+projectRouter.patch("/update",validateProject,projectController.updateProject);
 projectRouter.delete('/delete/:projectId',projectController.deleteProjectById);
 projectRouter.get('/projects',projectController.getAllProjectsByAdmin);
 projectRouter.get('/:id/projects',projectController.getAllProjectsByAdmin);
